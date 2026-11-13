@@ -4,7 +4,7 @@ from config import COLORES, FUENTES
 from vistas.dashboard import DashboardView
 from vistas.objetos import ObjetosView
 from vistas.libros import LibrosView
-#from vistas.cubiculos import CubiculosView
+from vistas.cubiculos import CubiculosView
 #from vistas.userconfig import UserconfigView
 class AppPrincipal(tk.Tk):
     def __init__(self):
