@@ -1,0 +1,11 @@
+# Credenciales locales
+database/credenciales.py
+
+# Caché de Python
+__pycache__/
+*.py[cod]
+
+# Entornos virtuales y editor
+.venv/
+venv/
+.vscode/

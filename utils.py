@@ -1,6 +1,9 @@
 import tkinter as tk
 from config import COLORES, FUENTES
+from PIL import Image, ImageTk
 
+def load_image(path, size):
+    return ImageTk.PhotoImage(Image.open(path).resize(size, Image.ADAPTIVE))
 
 def crear_tarjeta_kpi(parent, titulo, valor, subtitulo):
     """Crea las 3 tarjetas superiores de datos rápidos (KPIs)"""

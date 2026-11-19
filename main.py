@@ -1,7 +1,7 @@
 # main.py
 import tkinter as tk
-import imagesxd
 from config import COLORES, FUENTES
+from utils import load_image
 
 from vistas.cubiculos import CubiculosView
 from vistas.dashboard import DashboardView
@@ -31,7 +31,7 @@ class AppPrincipal(tk.Tk):
         self.sidebar.pack(side="left", fill="y")
         self.sidebar.pack_propagate(False)
 
-        self.image = imagesxd.load_image(r"proyecto_biblioteca/img/UTRLOGO.png", (200, 100))
+        self.image = load_image("img/UTRLOGO.png", (200, 100))
         UTR_logo_label = tk.Label(self.sidebar, image=self.image, bg=COLORES["rojo_principal"])
         UTR_logo_label.pack(pady=10)
 
