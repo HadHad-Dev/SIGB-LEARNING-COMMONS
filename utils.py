@@ -21,7 +21,6 @@ def crear_tarjeta_kpi(parent, titulo, valor, subtitulo):
              
     return card
 
-#verificar duncioanmiento de los argumentos de pad_x y , estar seguro si inician como 0 o lo toman como default en caso de no mandar algun argumento 
 def crear_tarjeta_base(parent, pad_x=0, pad_y=0):
     card = tk.Frame(parent, bg=COLORES["gris_claro"], padx=pad_x, pady=pad_y,
                     highlightbackground=COLORES["gris_linea"], highlightthickness=1)

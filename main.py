@@ -7,11 +7,9 @@ from vistas.cubiculos import CubiculosView
 from vistas.dashboard import DashboardView
 from vistas.objetos import ObjetosView
 from vistas.libros import LibrosView
-from vistas.cubiculos import CubiculosView
 from vistas.userconfig import UserconfigView
 class AppPrincipal(tk.Tk):
     def __init__(self):
-        # se genera la ventana principal
         super().__init__()
         self.title("Sistema de Gestión - Biblioteca UTR")
         self.geometry("1200x900") 
@@ -35,11 +33,10 @@ class AppPrincipal(tk.Tk):
         UTR_logo_label = tk.Label(self.sidebar, image=self.image, bg=COLORES["rojo_principal"])
         UTR_logo_label.pack(pady=10)
 
-        # Lista actualizada de botones según la imagen
         botones_menu = [
             ("Dashboard", lambda: self.cambiar_vista(DashboardView)),
             ("Cubículos", lambda:self.cambiar_vista(CubiculosView)),
-            ("Objetos Perdidos",lambda:self.cambiar_vista(ObjetosView)), # Cambia None por: lambda: self.cambiar_vista(ObjetosView)
+            ("Objetos Perdidos",lambda:self.cambiar_vista(ObjetosView)), 
             ("Libros", lambda:self.cambiar_vista(LibrosView)),
             ("Configuracion", lambda:self.cambiar_vista(UserconfigView))
         ]
@@ -59,7 +56,6 @@ class AppPrincipal(tk.Tk):
         self.main_container = tk.Frame(self, bg=COLORES["blanco_fondo"])
         self.main_container.pack(side="right", fill="both", expand=True)
 
-        # Cargar vista por defecto al iniciar
         self.cambiar_vista(DashboardView)
 
     def cambiar_vista(self, ClaseVista):
@@ -67,10 +63,8 @@ class AppPrincipal(tk.Tk):
         if self.vista_actual is not None:
             self.vista_actual.destroy()
             
-        # Instancia la nueva clase pasándole main_container como padre
         self.vista_actual = ClaseVista(self.main_container)
         
-        # Empaqueta el nuevo Frame para que llene el contenedor
         self.vista_actual.pack(fill="both", expand=True)
 
 if __name__ == "__main__":

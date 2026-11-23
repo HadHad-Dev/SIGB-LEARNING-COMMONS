@@ -1,2 +1,5 @@
+matplotlib
 mysql-connector-python
 Pillow
+fpdf2
+openpyxl

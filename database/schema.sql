@@ -6,7 +6,6 @@ CREATE DATABASE sigb_learning_commons
 
 USE sigb_learning_commons;
 
--- CATEGORY
 CREATE TABLE category (
     category_id              INT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
     name_category            VARCHAR(60) NOT NULL UNIQUE,
@@ -18,7 +17,6 @@ CREATE TABLE category (
     CONSTRAINT chk_category_max_time CHECK (maximum_time_minute > 0)
 );
 
---INVENTORY_RESOURCE
 CREATE TABLE inventory_resource (
     bar_code          VARCHAR(40) PRIMARY KEY,
     category_id       INT UNSIGNED NOT NULL,
@@ -36,6 +34,9 @@ CREATE TABLE inventory_resource (
     CONSTRAINT chk_resource_capacity CHECK (capacity IS NULL OR capacity > 0)
 );
 
+-- ============================================================================
+-- 3. USER
+-- ============================================================================
 CREATE TABLE user (
     user_id         INT UNSIGNED PRIMARY KEY,
     full_name       VARCHAR(120) NOT NULL,
@@ -56,6 +57,7 @@ CREATE TABLE user (
     phone           VARCHAR(20) NULL,
     created_at      TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
     updated_at      TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+
     CONSTRAINT chk_password_by_rol CHECK (
         (user_type = 'externo' AND password IS NULL) OR
         (user_type <> 'externo' AND password IS NOT NULL)
@@ -80,27 +82,6 @@ CREATE TABLE user (
     )
 );
 
---  SANCTION
-CREATE TABLE sanction (
-    sanction_id INT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
-    user_id     INT UNSIGNED NOT NULL,
-    reason      VARCHAR(255) NOT NULL,
-    started_at  DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
-    ends_at     DATETIME NOT NULL,
-    applied_by  INT UNSIGNED NOT NULL,
-    created_at  TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
-    updated_at  TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
-
-    CONSTRAINT fk_sanction_user
-        FOREIGN KEY (user_id) REFERENCES user(user_id)
-        ON DELETE RESTRICT ON UPDATE RESTRICT,
-    CONSTRAINT fk_sanction_applied_by
-        FOREIGN KEY (applied_by) REFERENCES user(user_id)
-        ON DELETE RESTRICT ON UPDATE RESTRICT,
-    CONSTRAINT chk_sanction_dates CHECK (ends_at > started_at)
-);
-
---  ACTIVE_USAGE
 CREATE TABLE active_usage (
     usage_id        INT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
     user_id         INT UNSIGNED NOT NULL,
@@ -129,7 +110,9 @@ CREATE TABLE active_usage (
     CONSTRAINT chk_active_attendees CHECK (attendees_count >= 1)
 );
 
---  USAGE_HISTORY
+-- ============================================================================
+-- 5. USAGE_HISTORY
+-- ============================================================================
 CREATE TABLE usage_history (
     history_id      INT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
     user_id         INT UNSIGNED NOT NULL,
@@ -170,67 +153,51 @@ CREATE TABLE usage_history (
     CONSTRAINT chk_history_attendees CHECK (attendees_count >= 1)
 );
 
--- INCIDENT_REPORT
-CREATE TABLE incident_report (
-    incident_id          INT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
-    bar_code             VARCHAR(40) NULL,
-    incident_type        ENUM('falla_equipo', 'objeto_perdido', 'libro_danado') NOT NULL,
+
+CREATE TABLE lost_item (
+    item_id              INT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
     title                VARCHAR(120) NOT NULL,
-    incident_description TEXT NOT NULL,
-    incident_location    VARCHAR(100) NULL,
-    reported_by_user_id  INT UNSIGNED NULL,
-    reporter_name        VARCHAR(120) NULL,
-    image_path           VARCHAR(255) NULL,
-    report_date          DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
-    status_resolution    ENUM('pendiente', 'en_custodia', 'resuelto', 'entregado') NOT NULL,
-    resolved_at          DATETIME NULL,
-    resolved_by          INT UNSIGNED NULL,
+    description          TEXT NOT NULL,
+    found_location       VARCHAR(100) NULL,
+    found_by_user_id     INT UNSIGNED NULL,
+    finder_name          VARCHAR(120) NULL,
+    found_date           DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    status               ENUM('en_custodia', 'entregado') NOT NULL DEFAULT 'en_custodia',
+    delivered_at         DATETIME NULL,
+    delivered_by         INT UNSIGNED NULL,
     delivered_to_user_id INT UNSIGNED NULL,
     delivered_to_name    VARCHAR(120) NULL,
     created_at           TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
     updated_at           TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
 
-    CONSTRAINT fk_incident_resource
-        FOREIGN KEY (bar_code) REFERENCES inventory_resource(bar_code)
+    CONSTRAINT fk_lost_found_by
+        FOREIGN KEY (found_by_user_id) REFERENCES user(user_id)
         ON DELETE RESTRICT ON UPDATE RESTRICT,
-    CONSTRAINT fk_incident_reported_by
-        FOREIGN KEY (reported_by_user_id) REFERENCES user(user_id)
+    CONSTRAINT fk_lost_delivered_by
+        FOREIGN KEY (delivered_by) REFERENCES user(user_id)
         ON DELETE RESTRICT ON UPDATE RESTRICT,
-    CONSTRAINT fk_incident_resolved_by
-        FOREIGN KEY (resolved_by) REFERENCES user(user_id)
-        ON DELETE RESTRICT ON UPDATE RESTRICT,
-    CONSTRAINT fk_incident_delivered_to
+    CONSTRAINT fk_lost_delivered_to
         FOREIGN KEY (delivered_to_user_id) REFERENCES user(user_id)
         ON DELETE RESTRICT ON UPDATE RESTRICT,
 
-    CONSTRAINT chk_incident_reporter CHECK (
-        reported_by_user_id IS NOT NULL OR reporter_name IS NOT NULL
+    -- Quien encontró el objeto: usuario registrado o nombre libre
+    CONSTRAINT chk_lost_finder CHECK (
+        found_by_user_id IS NOT NULL OR finder_name IS NOT NULL
     ),
-    CONSTRAINT chk_incident_barcode_coherence CHECK (
-        (incident_type = 'objeto_perdido' AND bar_code IS NULL) OR
-        (incident_type <> 'objeto_perdido' AND bar_code IS NOT NULL)
-    ),
-    CONSTRAINT chk_incident_status_by_type CHECK (
-        (incident_type = 'objeto_perdido' AND status_resolution IN ('en_custodia', 'entregado')) OR
-        (incident_type <> 'objeto_perdido' AND status_resolution IN ('pendiente', 'resuelto'))
-    ),
-    CONSTRAINT chk_incident_resolution_info CHECK (
-        (status_resolution IN ('resuelto', 'entregado')
-            AND resolved_at IS NOT NULL
-            AND resolved_at >= report_date
-            AND resolved_by IS NOT NULL) OR
-        (status_resolution IN ('pendiente', 'en_custodia')
-            AND resolved_at IS NULL
-            AND resolved_by IS NULL)
-    ),
-    CONSTRAINT chk_incident_delivery_info CHECK (
-        (status_resolution = 'entregado'
-            AND (delivered_to_user_id IS NOT NULL OR delivered_to_name IS NOT NULL)) OR
-        (status_resolution <> 'entregado'
+    CONSTRAINT chk_lost_delivery CHECK (
+        (status = 'en_custodia'
+            AND delivered_at IS NULL
+            AND delivered_by IS NULL
             AND delivered_to_user_id IS NULL
-            AND delivered_to_name IS NULL)
+            AND delivered_to_name IS NULL) OR
+        (status = 'entregado'
+            AND delivered_at IS NOT NULL
+            AND delivered_at >= found_date
+            AND delivered_by IS NOT NULL
+            AND (delivered_to_user_id IS NOT NULL OR delivered_to_name IS NOT NULL))
     )
 );
+
 
 INSERT INTO category (name_category, maximum_time_minute, requires_physical_return) VALUES
     ('Computadora',      120, FALSE),
@@ -250,6 +217,7 @@ INSERT INTO inventory_resource (bar_code, category_id, description_title, author
     ('LIB-003', 5, 'Python Crash Course',           'Eric Matthes',     NULL, 'mantenimiento', 'Estante A1'),
     ('UTL-001', 6, 'Audífonos Sony WH',             NULL,               NULL, 'disponible',    'Recepción');
 
+-- 3. Usuarios
 INSERT INTO user (user_id, full_name, user_type, gender, password, major, quarter, teacher_type, department_area, phone) VALUES
     (1001, 'Carlos Méndez',            'administrador',  NULL, 'admin123', NULL,   NULL, NULL,  NULL,   NULL),
     (5479, 'José Javier López Chávez', 'alumno',         'M',  '1234',     'TDSM', 4,    NULL,  NULL,   NULL),
@@ -259,10 +227,6 @@ INSERT INTO user (user_id, full_name, user_type, gender, password, major, quarte
     (686,  'Laura Elena Torres',       'docente',        'F',  'doc123',   NULL,   NULL, 'PTC', NULL,   NULL),
     (2001, 'María Fernanda Cruz',      'administrativo', 'F',  'adm123',   NULL,   NULL, NULL,  'TICs', NULL),
     (9001, 'Roberto Hernández',        'externo',        NULL, NULL,       NULL,   NULL, NULL,  NULL,   '4491234567');
-
-INSERT INTO sanction (user_id, reason, started_at, ends_at, applied_by) VALUES
-    (5481, 'Devolución tardía de libro', NOW() - INTERVAL 2 DAY, NOW() + INTERVAL 5 DAY, 1001);
-
 
 INSERT INTO active_usage (user_id, category_id, bar_code, attendees_count, starting_date, due_at) VALUES
     (5479, NULL, 'CUB-02',  3,  NOW() - INTERVAL 30 MINUTE,  NOW() + INTERVAL 90 MINUTE),
@@ -279,23 +243,69 @@ INSERT INTO usage_history (user_id, category_id, bar_code, attendees_count, star
     (5480, NULL, 'UTL-001', 1, NOW() - INTERVAL 1 DAY, NOW() - INTERVAL 1 DAY + INTERVAL 3 HOUR, NOW() - INTERVAL 1 DAY + INTERVAL 2 HOUR,     'completado',        1001),
     (2001, NULL, 'PC-01',   1, NOW() - INTERVAL 6 HOUR, NOW() - INTERVAL 4 HOUR,                 NOW() - INTERVAL 5 HOUR,                      'completado',        1001);
 
-INSERT INTO incident_report (
-    bar_code, incident_type, title, incident_description, incident_location,
-    reported_by_user_id, reporter_name, image_path, report_date,
-    status_resolution, resolved_at, resolved_by, delivered_to_user_id, delivered_to_name
+INSERT INTO lost_item (
+    title, description, found_location,
+    found_by_user_id, finder_name, found_date,
+    status, delivered_at, delivered_by, delivered_to_user_id, delivered_to_name
 ) VALUES
-    (NULL, 'objeto_perdido', 'Termo metálico azul', 'Encontrado debajo de la mesa central.', 'Sala General',
-     5479, NULL, NULL, NOW() - INTERVAL 1 DAY,
+    ('Termo metálico azul', 'Encontrado debajo de la mesa central, marca Yeti.', 'Sala General',
+     5479, NULL, NOW() - INTERVAL 1 DAY,
      'en_custodia', NULL, NULL, NULL, NULL),
 
-    (NULL, 'objeto_perdido', 'Cargador USB-C blanco', 'Dejado conectado tras cerrar turno.', 'Cubículo 01',
-     NULL, 'Personal de limpieza', NULL, NOW() - INTERVAL 3 DAY,
-     'entregado', NOW() - INTERVAL 2 DAY, 1001, 5480, NULL),
+    ('Calculadora científica Casio', 'Modelo fx-991 con etiqueta borrosa atrás.', 'Cubículo 02',
+     686, NULL, NOW() - INTERVAL 2 DAY,
+     'en_custodia', NULL, NULL, NULL, NULL),
 
-    ('PC-01', 'falla_equipo', 'Monitor parpadea', 'El cable HDMI parece flojo al mover la pantalla.', 'Zona Cómputo',
-     686, NULL, NULL, NOW() - INTERVAL 5 HOUR,
-     'pendiente', NULL, NULL, NULL, NULL),
+    ('Credencial UTR', 'Encontrada junto a la impresora de recepción.', 'Recepción',
+     NULL, 'Personal de limpieza', NOW() - INTERVAL 4 HOUR,
+     'en_custodia', NULL, NULL, NULL, NULL),
 
-    ('LIB-003', 'libro_danado', 'Portada despegada', 'Lomo dañado al recibir devolución; enviado a reparación.', 'Recepción',
-     1001, NULL, NULL, NOW() - INTERVAL 4 DAY,
-     'resuelto', NOW() - INTERVAL 1 DAY, 1001, NULL, NULL);
+    ('Cargador USB-C blanco', 'Dejado conectado tras cerrar turno.', 'Cubículo 01',
+     NULL, 'Personal de limpieza', NOW() - INTERVAL 3 DAY,
+     'entregado', NOW() - INTERVAL 2 DAY, 1001, 5480, NULL);
+     
+     
+     USE sigb_learning_commons;
+
+INSERT INTO inventory_resource (bar_code, category_id, description_title, author, capacity, status, shelf_location) VALUES
+    ('LIB-004', 5, 'Introducción a los Algoritmos',        'Thomas H. Cormen',    NULL, 'disponible', 'Estante A1'),
+    ('LIB-005', 5, 'Redes de Computadoras',                'Andrew S. Tanenbaum', NULL, 'disponible', 'Estante B1'),
+    ('LIB-006', 5, 'Sistemas Operativos Modernos',         'Andrew S. Tanenbaum', NULL, 'disponible', 'Estante B2'),
+    ('LIB-007', 5, 'Ingeniería de Software',               'Ian Sommerville',     NULL, 'disponible', 'Estante A3'),
+    ('LIB-008', 5, 'Cálculo de una Variable',              'James Stewart',       NULL, 'disponible', 'Estante C1'),
+    ('LIB-009', 5, 'Probabilidad y Estadística',           'Ronald E. Walpole',   NULL, 'disponible', 'Estante C2'),
+    ('LIB-010', 5, 'Fundamentos de Marketing',             'Philip Kotler',       NULL, 'disponible', 'Estante D1'),
+    ('LIB-011', 5, 'Electrónica: Teoría de Circuitos',     'Robert L. Boylestad', NULL, 'disponible', 'Estante E1'),
+
+    ('LIB-012', 5, 'Automate the Boring Stuff with Python','Al Sweigart',         NULL, 'en_uso',     'Estante A1'),
+    ('LIB-013', 5, 'SQL Antipatterns',                     'Bill Karwin',         NULL, 'en_uso',     'Estante A2'),
+    ('LIB-014', 5, 'Diseño de Bases de Datos',             'Thomas Connolly',     NULL, 'en_uso',     'Estante A2'),
+    ('LIB-015', 5, 'Inteligencia Artificial: Un Enfoque',  'Stuart Russell',      NULL, 'en_uso',     'Estante B3'),
+    ('LIB-016', 5, 'Álgebra Lineal y sus Aplicaciones',    'David C. Lay',        NULL, 'en_uso',     'Estante C1'),
+    ('LIB-017', 5, 'Mecatrónica: Sistemas de Control',     'W. Bolton',           NULL, 'en_uso',     'Estante E2'),
+
+    ('LIB-018', 5, 'Patrones de Diseño',                   'Erich Gamma',         NULL, 'extraviado', 'Estante A3');
+
+INSERT INTO active_usage (user_id, category_id, bar_code, attendees_count, starting_date, due_at) VALUES
+    (5479, NULL, 'LIB-012', 1, NOW() - INTERVAL 1 HOUR,   NOW() + INTERVAL 7 HOUR),
+    (5480, NULL, 'LIB-013', 1, NOW() - INTERVAL 3 HOUR,   NOW() + INTERVAL 5 HOUR),
+    (686,  NULL, 'LIB-014', 1, NOW() - INTERVAL 30 MINUTE, NOW() + INTERVAL 7 HOUR),
+
+    (5481, NULL, 'LIB-015', 1, NOW() - INTERVAL 48 HOUR,  NOW() - INTERVAL 40 HOUR),
+    (5482, NULL, 'LIB-016', 1, NOW() - INTERVAL 24 HOUR,  NOW() - INTERVAL 16 HOUR),
+    (2001, NULL, 'LIB-017', 1, NOW() - INTERVAL 12 HOUR,  NOW() - INTERVAL 4 HOUR);
+
+INSERT INTO usage_history (
+    user_id, category_id, bar_code, attendees_count,
+    starting_date, due_at, end_date, close_reason, closed_by
+) VALUES
+    (5479, NULL, 'LIB-004', 1, NOW() - INTERVAL 1 DAY, NOW() - INTERVAL 1 DAY + INTERVAL 8 HOUR, NOW() - INTERVAL 1 DAY + INTERVAL 4 HOUR,  'completado', 1001),
+    (5480, NULL, 'LIB-005', 1, NOW() - INTERVAL 2 DAY, NOW() - INTERVAL 2 DAY + INTERVAL 8 HOUR, NOW() - INTERVAL 2 DAY + INTERVAL 6 HOUR,  'completado', 1001),
+    (5482, NULL, 'LIB-008', 1, NOW() - INTERVAL 3 DAY, NOW() - INTERVAL 3 DAY + INTERVAL 8 HOUR, NOW() - INTERVAL 3 DAY + INTERVAL 5 HOUR,  'completado', 1001),
+    (686,  NULL, 'LIB-009', 1, NOW() - INTERVAL 5 DAY, NOW() - INTERVAL 5 DAY + INTERVAL 8 HOUR, NOW() - INTERVAL 5 DAY + INTERVAL 7 HOUR,  'completado', 1001),
+
+    (5481, NULL, 'LIB-006', 1, NOW() - INTERVAL 4 DAY, NOW() - INTERVAL 4 DAY + INTERVAL 8 HOUR, NOW() - INTERVAL 4 DAY + INTERVAL 12 HOUR, 'completado', 1001),
+    (2001, NULL, 'LIB-010', 1, NOW() - INTERVAL 6 DAY, NOW() - INTERVAL 6 DAY + INTERVAL 8 HOUR, NOW() - INTERVAL 6 DAY + INTERVAL 15 HOUR, 'completado', 1001),
+
+    (5479, NULL, 'LIB-007', 1, NOW() - INTERVAL 10 DAY, NOW() - INTERVAL 10 DAY + INTERVAL 8 HOUR, NOW() - INTERVAL 10 DAY + INTERVAL 5 HOUR, 'completado', 1001),
+    (5480, NULL, 'LIB-011', 1, NOW() - INTERVAL 14 DAY, NOW() - INTERVAL 14 DAY + INTERVAL 8 HOUR, NOW() - INTERVAL 14 DAY + INTERVAL 9 HOUR, 'completado', 1001);
