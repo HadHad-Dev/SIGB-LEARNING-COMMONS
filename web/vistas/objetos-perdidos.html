@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Objetos perdidos · Biblioteca UTR</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Archivo:wght@600;700&family=JetBrains+Mono:wght@400&family=Public+Sans:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../styles/styles.css">
+</head>
+<body>
+<main class="pagina">
+  <a class="link" href="servicios.html">← Volver a servicios</a>
+  <header class="encabezado">
+    <img class="logo" src="../../img/UTRLOGO.png" alt="Logotipo de la Universidad Tecnológica El Retoño">
+    <h1>Objetos perdidos</h1>
+    <p class="encabezado__sub">Revisa si encontramos algo tuyo.</p>
+  </header>
+
+  <div id="aviso" class="aviso" role="status" hidden></div>
+
+  <section class="seccion" aria-labelledby="t-objetos">
+    <div class="seccion__head"><h2 id="t-objetos">Objetos encontrados</h2><span class="help" id="conteo" aria-live="polite"></span></div>
+
+    <div class="barra-filtros">
+      <div class="field">
+        <label for="buscar">Buscar</label>
+        <input id="buscar" type="search" placeholder="Ej. termo, calculadora" autocomplete="off" aria-describedby="h-buscar">
+        <p class="help" id="h-buscar">Busca por nombre, descripción o lugar.</p>
+      </div>
+      <div class="field">
+        <label for="edificio">Edificio</label>
+        <select id="edificio" aria-describedby="h-edificio">
+          <option value="">Todos los edificios</option>
+        </select>
+        <p class="help" id="h-edificio">Filtra por dónde está resguardado.</p>
+      </div>
+    </div>
+
+    <div class="items" id="lista" data-lista><p class="vacio">Cargando objetos…</p></div>
+    <nav class="paginacion" id="paginacion" aria-label="Páginas de resultados" hidden></nav>
+  </section>
+</main>
+
+<script src="../js/comun.js" defer></script>
+<script src="../js/api.js" defer></script>
+<script src="../js/objetos-perdidos.js" defer></script>
+</body>
+</html>

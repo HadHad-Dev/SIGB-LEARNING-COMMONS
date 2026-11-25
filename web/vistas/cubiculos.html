@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Cubículos · Biblioteca UTR</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Archivo:wght@600;700&family=JetBrains+Mono:wght@400&family=Public+Sans:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../styles/styles.css">
+</head>
+<body>
+<main class="pagina">
+  <a class="link" href="servicios.html">← Volver a servicios</a>
+  <header class="encabezado">
+    <img class="logo" src="../../img/UTRLOGO.png" alt="Logotipo de la Universidad Tecnológica El Retoño">
+    <h1>Cubículos</h1>
+    <p class="encabezado__sub">Aparta un espacio para estudiar hasta por 1 hora.</p>
+  </header>
+
+  <div id="aviso" class="aviso" role="status" hidden></div>
+
+  <section class="seccion" aria-label="Reglas de reserva">
+    <div class="fechas">
+      <div class="dato"><span class="etiqueta">Horario de reservas</span><span><span class="mono">07:30</span> a <span class="mono">16:30</span> · máximo 1 hora</span></div>
+      <div class="dato"><span class="etiqueta">Disponibilidad de hoy</span><span class="mono" id="hoy"></span></div>
+    </div>
+  </section>
+
+  <div>
+    <p class="cal__leyenda help"><span class="leyenda leyenda--libre">Libre</span><span class="leyenda leyenda--reservado">Reservado</span><span class="leyenda leyenda--ocupado">Ocupado</span></p>
+  </div>
+
+  <section class="cubiculos" id="lista" aria-label="Cubículos"><p class="vacio">Cargando cubículos…</p></section>
+</main>
+
+<!-- Reservar un cubículo -->
+<dialog class="modal" id="modal" aria-labelledby="m-titulo">
+  <div class="modal__cuerpo">
+    <div><h2 id="m-titulo">Reservar cubículo</h2><p class="help" id="m-info"></p></div>
+    <div class="field">
+      <label for="r-cub">Cubículo</label>
+      <select id="r-cub"></select>
+      <p class="help">Elige el cubículo que quieres usar.</p>
+    </div>
+    <div class="fechas">
+      <div class="field">
+        <label for="r-inicio">Hora de inicio</label>
+        <select id="r-inicio"></select>
+        <p class="help">Las horas apartadas salen bloqueadas.</p>
+      </div>
+      <div class="field">
+        <label for="r-dur">Duración</label>
+        <select id="r-dur"><option value="30">30 minutos</option><option value="60" selected>1 hora</option></select>
+        <p class="help">Máximo 1 hora.</p>
+      </div>
+    </div>
+    <p class="help" id="r-resumen"></p>
+    <p class="help" id="r-msg" aria-live="polite"></p>
+    <button class="btn" id="r-confirmar" type="button">Confirmar reserva</button>
+    <button class="link" id="r-cancelar" type="button">Cancelar</button>
+  </div>
+</dialog>
+
+<script src="../js/comun.js" defer></script>
+<script src="../js/api.js" defer></script>
+<script src="../js/cubiculos.js" defer></script>
+</body>
+</html> 
