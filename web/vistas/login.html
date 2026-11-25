@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Iniciar sesión · Biblioteca UTR</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Archivo:wght@700&family=JetBrains+Mono:wght@400&family=Public+Sans:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../styles/styles.css">
+</head>
+<body>
+<main class="pantalla-centrada">
+<div class="card card--sombra">
+  <div class="card__head">
+    <img class="logo" src="../../img/UTRLOGO.png" alt="Logotipo de la Universidad Tecnológica El Retoño">
+    <h1>Iniciar sesión</h1>
+  </div>
+
+  <div class="tabs" role="tablist" aria-label="Tipo de perfil">
+    <button class="tab" role="tab" id="tab-est" aria-selected="true" aria-controls="panel-est" type="button">Estudiante</button>
+    <button class="tab" role="tab" id="tab-inv" aria-selected="false" aria-controls="panel-inv" type="button">Invitado</button>
+    <button class="tab" role="tab" id="tab-adm" aria-selected="false" aria-controls="panel-adm" type="button">Administrador</button>
+  </div>
+
+  <form id="form" novalidate>
+    <!-- Variante A: Estudiante -->
+    <div class="panel" id="panel-est" role="tabpanel" aria-labelledby="tab-est">
+      <div class="field" id="f-mat">
+        <label for="matricula">Matrícula</label>
+        <input class="mono" id="matricula" inputmode="numeric" autocomplete="username" placeholder="2201145" aria-describedby="h-mat">
+        <p class="help" id="h-mat">La encuentras en tu credencial.</p>
+      </div>
+      <div class="field" id="f-pest">
+        <label for="clave-est">Contraseña</label>
+        <div class="pw">
+          <input id="clave-est" type="password" autocomplete="current-password" aria-describedby="h-pest">
+          <button type="button" class="eye" data-for="clave-est" aria-label="Mostrar contraseña" aria-pressed="false">
+            <svg class="on" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M1.5 12S5.5 5 12 5s10.5 7 10.5 7-4 7-10.5 7S1.5 12 1.5 12z"/><circle cx="12" cy="12" r="3"/></svg>
+            <svg class="off" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M17.9 17.9A10.8 10.8 0 0 1 12 19C5.5 19 1.5 12 1.5 12a19 19 0 0 1 4.6-5.3M9.9 5.2A10 10 0 0 1 12 5c6.5 0 10.5 7 10.5 7a19 19 0 0 1-2.2 3.1M1 1l22 22"/><path d="M9.9 9.9a3 3 0 0 0 4.2 4.2"/></svg>
+          </button>
+        </div>
+        <div class="row">
+          <p class="help" id="h-pest">Escribe la contraseña de tu cuenta.</p>
+          <button type="button" class="link forgot">¿Olvidaste tu contraseña?</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Variante B: Invitado -->
+    <div class="panel" id="panel-inv" role="tabpanel" aria-labelledby="tab-inv" hidden>
+      <div class="field" id="f-nom">
+        <label for="nombre">Nombre</label>
+        <input id="nombre" type="text" autocomplete="given-name" placeholder="Ana Sofía" aria-describedby="h-nom">
+        <p class="help" id="h-nom">Escribe tu nombre.</p>
+      </div>
+      <div class="field" id="f-ape">
+        <label for="apellido">Apellido</label>
+        <input id="apellido" type="text" autocomplete="family-name" placeholder="Martínez López" aria-describedby="h-ape">
+        <p class="help" id="h-ape">Escribe tus apellidos.</p>
+      </div>
+    </div>
+
+    <!-- Variante C: Administrador -->
+    <div class="panel" id="panel-adm" role="tabpanel" aria-labelledby="tab-adm" hidden>
+      <div class="field" id="f-mail">
+        <label for="correo">Correo institucional</label>
+        <input id="correo" type="email" autocomplete="email" placeholder="nombre@utr.edu.mx" aria-describedby="h-mail">
+        <p class="help" id="h-mail">Usa tu correo oficial de la UTR.</p>
+      </div>
+      <div class="field" id="f-padm">
+        <label for="clave-adm">Contraseña</label>
+        <div class="pw">
+          <input id="clave-adm" type="password" autocomplete="current-password" aria-describedby="h-padm">
+          <button type="button" class="eye" data-for="clave-adm" aria-label="Mostrar contraseña" aria-pressed="false">
+            <svg class="on" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M1.5 12S5.5 5 12 5s10.5 7 10.5 7-4 7-10.5 7S1.5 12 1.5 12z"/><circle cx="12" cy="12" r="3"/></svg>
+            <svg class="off" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M17.9 17.9A10.8 10.8 0 0 1 12 19C5.5 19 1.5 12 1.5 12a19 19 0 0 1 4.6-5.3M9.9 5.2A10 10 0 0 1 12 5c6.5 0 10.5 7 10.5 7a19 19 0 0 1-2.2 3.1M1 1l22 22"/><path d="M9.9 9.9a3 3 0 0 0 4.2 4.2"/></svg>
+          </button>
+        </div>
+        <div class="row">
+          <p class="help" id="h-padm"></p>
+          <button type="button" class="link forgot">¿Olvidaste tu contraseña?</button>
+        </div>
+      </div>
+    </div>
+
+    <button class="btn" type="submit">Entrar</button>
+  </form>
+
+  <p class="card__foot">¿Aún no tienes cuenta? <a class="link" href="registro.html">Crear cuenta</a></p>
+</div>
+</main>
+
+<script src="../js/comun.js" defer></script>
+<script src="../js/api.js" defer></script>
+<script src="../js/login.js" defer></script>
+</body>
+</html>

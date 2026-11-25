@@ -1,0 +1,407 @@
+/* ==========================================================
+   Biblioteca UTR · Hoja de estilos compartida
+   Basada en la Guía de Estilos oficial.
+   Secciones: 1) Variables  2) Base  3) Tarjeta  4) Formularios
+              5) Botones y enlaces  6) Componentes de Login  7) Servicios  8) Préstamos  9) Objetos perdidos  10) Calendario de eventos
+   ========================================================== */
+
+/* 1) Variables ------------------------------------------- */
+:root{
+  --rojo:#B3261E;
+  --rojo-oscuro:#8F1D17;
+  --rosa-claro:#FDECEA;
+  --blanco:#FFFFFF;
+  --gris-claro:#FAF6F5;
+  --gris-linea:#EADFDD;
+  --texto:#1F1A1A;
+  --texto-gris:#6B5F5E;
+
+  /* Estados (siempre acompañados de texto) */
+  --verde:#1F7A4D;      --verde-claro:#E3F4EA;   /* Disponible */
+  --ambar:#8A4F00;      --ambar-claro:#FDF1DC;   /* Llave pendiente */
+  /* Ocupado: usa --rojo sobre --rosa-claro */
+
+  --fuente-titulo:'Archivo',system-ui,sans-serif;
+  --fuente-texto:'Public Sans',system-ui,-apple-system,'Segoe UI',sans-serif;
+  --fuente-mono:'JetBrains Mono',ui-monospace,Consolas,monospace;
+
+  color-scheme:light;
+  box-sizing:border-box;
+  padding-top:env(safe-area-inset-top,0px);
+  padding-bottom:env(safe-area-inset-bottom,0px);
+}
+
+/* 2) Base ------------------------------------------------ */
+*,*::before,*::after{box-sizing:inherit}
+html,body{margin:0;min-height:100%}
+body{
+  background:var(--blanco);
+  color:var(--texto);
+  font-family:var(--fuente-texto);
+  font-size:16px;
+}
+h1{
+  font-family:var(--fuente-titulo);
+  font-weight:700;
+  font-size:28px;
+  margin:0;
+  color:var(--texto);
+}
+
+/* Pantallas centradas (login, registro, recuperación) */
+.pantalla-centrada{
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  min-height:100vh;
+  padding:24px 16px;
+}
+
+/* Variante en columna: encabezado + contenido centrados */
+.pantalla-centrada--columna{flex-direction:column;gap:32px}
+.contenedor{width:100%;max-width:960px}
+
+/* 3) Tarjeta (sin sombra: la separa solo su borde) -------- */
+.card{
+  width:100%;
+  max-width:420px;
+  background:var(--gris-claro);
+  border:1px solid var(--gris-linea);
+  border-radius:16px;
+  padding:24px;
+}
+/* La tarjeta de Login es la ÚNICA del sistema con sombra */
+.card--sombra{
+  box-shadow:0 8px 24px rgba(31,26,26,.08);
+  padding:32px;
+}
+.card__head{
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  gap:16px;
+  margin-bottom:24px;
+}
+.card__head h1{text-align:center}
+.card__sub{
+  margin:-8px 0 0;
+  text-align:center;
+  font-size:14px;
+  color:var(--texto-gris);
+}
+.logo{
+  height:72px;
+  width:auto;
+  max-width:100%;
+  object-fit:contain;
+}
+.card__foot{
+  margin:24px 0 0;
+  text-align:center;
+  font-size:14px;
+  color:var(--texto-gris);
+}
+
+/* 4) Formularios: etiqueta arriba + campo + ayuda abajo ---- */
+form{display:flex;flex-direction:column;gap:24px}
+.panel{display:flex;flex-direction:column;gap:16px}
+.panel[hidden]{display:none}
+.field{display:flex;flex-direction:column;gap:8px}
+
+label,.etiqueta{
+  font:400 12px var(--fuente-texto);
+  text-transform:uppercase;
+  letter-spacing:.04em;
+  color:var(--texto);
+}
+input{
+  width:100%;
+  min-height:40px;
+  padding:8px 12px;
+  background:var(--blanco);
+  border:1px solid var(--gris-linea);
+  border-radius:8px;
+  color:var(--texto);
+  font:400 16px var(--fuente-texto);
+}
+input.mono{font:400 14px var(--fuente-mono)}
+input::placeholder{color:var(--texto-gris);opacity:.8;font-family:var(--fuente-texto)}
+input.mono::placeholder{font-family:var(--fuente-mono)}
+
+/* Select (menú desplegable) */
+select{
+  width:100%;
+  min-height:40px;
+  padding:8px 40px 8px 12px;
+  background-color:var(--blanco);
+  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%236B5F5E' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M6 9l6 6 6-6'/%3E%3C/svg%3E");
+  background-repeat:no-repeat;
+  background-position:right 12px center;
+  background-size:16px;
+  border:1px solid var(--gris-linea);
+  border-radius:8px;
+  color:var(--texto);
+  font:400 16px var(--fuente-texto);
+  appearance:none;
+  -webkit-appearance:none;
+  cursor:pointer;
+}
+select:required:invalid{color:var(--texto-gris)}
+select option{color:var(--texto)}
+
+.help{font-size:14px;color:var(--texto-gris);margin:0}
+
+/* Estado de error */
+.field.error input,
+.field.error select{border-color:var(--rojo)}
+.field.error .help{color:var(--rojo)}
+
+/* Foco accesible */
+.tab:focus-visible,.link:focus-visible,.btn:focus-visible,
+input:focus-visible,select:focus-visible,.eye:focus-visible{outline:2px solid var(--rojo);outline-offset:2px}
+
+/* Campo de contraseña con ojo mostrar/ocultar */
+.pw{position:relative}
+.pw input{padding-right:44px}
+.eye{
+  position:absolute;top:0;right:0;
+  width:40px;height:40px;
+  display:flex;align-items:center;justify-content:center;
+  background:transparent;border:0;border-radius:8px;
+  cursor:pointer;color:var(--texto-gris);
+}
+.eye:hover{color:var(--texto)}
+.eye svg{width:20px;height:20px}
+.eye .off{display:none}
+.eye[aria-pressed="true"] .on{display:none}
+.eye[aria-pressed="true"] .off{display:block}
+
+/* 5) Botones y enlaces ------------------------------------ */
+/* Solo un botón rojo por pantalla */
+.btn{
+  width:100%;
+  min-height:40px;
+  padding:8px 16px;
+  border:0;
+  border-radius:8px;
+  cursor:pointer;
+  background:var(--rojo);
+  color:#FFFFFF;
+  font:500 16px var(--fuente-texto);
+  transition:background .2s ease;
+}
+.btn:hover{background:var(--rojo-oscuro)}
+
+.link{
+  color:var(--rojo);
+  text-decoration:none;
+  font-size:14px;
+  background:none;
+  border:0;
+  padding:0;
+  cursor:pointer;
+  font-family:inherit;
+}
+.link:hover{text-decoration:underline}
+
+/* 6) Componentes de Login --------------------------------- */
+.tabs{display:flex;border-bottom:1px solid var(--gris-linea);margin-bottom:24px}
+.tab{
+  flex:1;
+  min-height:40px;
+  padding:8px 4px;
+  background:transparent;
+  border:0;
+  border-bottom:2px solid transparent;
+  margin-bottom:-1px;
+  cursor:pointer;
+  font:500 16px var(--fuente-texto);
+  color:var(--texto-gris);
+  border-radius:8px 8px 0 0;
+  transition:background .15s,color .15s;
+}
+.tab[aria-selected="true"],
+.tab[aria-pressed="true"]{
+  background:var(--rosa-claro);
+  color:var(--rojo);
+  border-bottom-color:var(--rojo);
+}
+
+/* Fila de ayuda + enlace a la derecha */
+.row{display:flex;justify-content:space-between;align-items:flex-start;gap:12px}
+.row .help:empty{display:none}
+.row .forgot{margin-left:auto}
+
+@media (max-width:420px){
+  .card,.card--sombra{padding:24px 16px}
+  .tab{font-size:14px}
+}
+
+/* 7) Servicios (pantalla principal tras iniciar sesión) ---- */
+.encabezado{
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  gap:8px;
+  text-align:center;
+}
+.encabezado .logo{margin-bottom:8px}
+.encabezado__sub{margin:0;font-size:16px;color:var(--texto-gris)}
+
+.servicios{
+  display:grid;
+  grid-template-columns:repeat(3,1fr);
+  gap:24px;
+}
+
+/* Tarjeta de servicio: toda la tarjeta es un enlace */
+.servicio{
+  display:flex;
+  flex-direction:column;
+  align-items:flex-start;
+  gap:16px;
+  padding:24px;
+  background:var(--gris-claro);
+  border:1px solid var(--gris-linea);
+  border-radius:8px;
+  color:var(--texto);
+  text-decoration:none;
+  transition:transform 180ms ease, box-shadow 180ms ease, border-color 180ms ease;
+}
+.servicio:hover{
+  transform:translateY(-6px);
+  box-shadow:0 12px 24px rgba(31,26,26,.10);
+  border-color:var(--rojo);
+}
+.servicio:active{
+  transform:translateY(2px) scale(.99);
+  box-shadow:0 3px 8px rgba(31,26,26,.08);
+}
+.servicio:focus-visible{outline:2px solid var(--rojo);outline-offset:2px}
+
+.servicio__icono{
+  width:48px;
+  height:48px;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  background:var(--rosa-claro);
+  color:var(--rojo);
+  border-radius:8px;
+}
+.servicio__icono svg{width:28px;height:28px}
+.servicio h2{
+  margin:0;
+  font-family:var(--fuente-titulo);
+  font-weight:600;
+  font-size:20px;
+  color:var(--texto);
+}
+.servicio p{margin:0;font-size:16px;color:var(--texto-gris)}
+.servicio__accion{
+  margin-top:auto;
+  font-size:16px;
+  font-weight:500;
+  color:var(--rojo);
+}
+
+@media (max-width:720px){
+  .servicios{grid-template-columns:1fr}
+}
+@media (prefers-reduced-motion:reduce){
+  .servicio{transition:none}
+  .servicio:hover,.servicio:active{transform:none}
+}
+
+/* 8) Préstamos -------------------------------------------- */
+h2{margin:0;font-family:var(--fuente-titulo);font-weight:600;font-size:20px;color:var(--texto)}
+h3{margin:0;font-family:var(--fuente-titulo);font-weight:600;font-size:16px;color:var(--texto)}
+.mono{font:400 14px var(--fuente-mono)}
+
+.pagina{width:100%;max-width:1040px;margin:0 auto;padding:32px 16px;display:flex;flex-direction:column;gap:32px}
+.pagina > .link{align-self:flex-start}
+.tabs--filtros{overflow-x:auto;overflow-y:hidden;scrollbar-width:none;margin-bottom:0}
+.tabs--filtros::-webkit-scrollbar{display:none}
+.tabs--filtros .tab{flex:1 0 auto;padding:8px 16px;white-space:nowrap}
+
+.seccion{background:var(--gris-claro);border:1px solid var(--gris-linea);border-radius:8px;padding:16px;display:flex;flex-direction:column;gap:16px}
+.seccion[hidden]{display:none}
+.seccion__head{display:flex;justify-content:space-between;align-items:baseline;gap:12px}
+.items{display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:16px}
+.vacio{margin:0;font-size:14px;color:var(--texto-gris)}
+
+.item{display:flex;flex-direction:column;gap:12px;padding:16px;background:var(--blanco);border:1px solid var(--gris-linea);border-radius:8px}
+.item__media{height:160px;display:flex;align-items:center;justify-content:center;background:var(--rosa-claro);color:var(--rojo);border-radius:8px;overflow:hidden}
+.item__media svg{width:56px;height:56px}
+.item__media img{width:100%;height:100%;object-fit:cover}
+.item__media--libros img{object-fit:contain}
+.dato{display:flex;flex-direction:column;gap:4px;font-size:14px;color:var(--texto-gris)}
+.dato .etiqueta{color:var(--texto)}
+.item .btn{margin-top:auto}
+
+/* Botón secundario (solo hay un botón rojo visible) */
+.btn--secundario{background:var(--blanco);color:var(--texto);border:1px solid var(--gris-linea)}
+.btn--secundario:hover{background:var(--blanco);border-color:var(--rojo);color:var(--rojo)}
+
+/* Avisos */
+.aviso{padding:12px 16px;border:1px solid;border-radius:8px;font-size:14px}
+.aviso[hidden]{display:none}
+.aviso--ok{background:var(--verde-claro);color:var(--verde);border-color:var(--verde)}
+.aviso--error{background:var(--rosa-claro);color:var(--rojo);border-color:var(--rojo)}
+.help--error{color:var(--rojo)}
+
+/* Ventana de solicitud con mini calendario */
+.modal{width:min(420px,calc(100% - 32px));padding:0;background:var(--gris-claro);color:var(--texto);border:1px solid var(--gris-linea);border-radius:8px}
+.modal::backdrop{background:rgba(31,26,26,.4)}
+.modal__cuerpo{display:flex;flex-direction:column;gap:16px;padding:24px}
+.modal__cuerpo .link{align-self:center}
+.cal{display:flex;flex-direction:column;gap:8px}
+.cal__nav{display:flex;align-items:center;justify-content:space-between}
+.cal__mes{font-family:var(--fuente-titulo);font-weight:600;font-size:16px}
+.icono-btn{width:40px;height:40px;background:var(--blanco);border:1px solid var(--gris-linea);border-radius:8px;color:var(--texto);font-size:20px;cursor:pointer}
+.icono-btn:disabled{opacity:.4;cursor:not-allowed}
+.icono-btn:focus-visible,.dia:focus-visible{outline:2px solid var(--rojo);outline-offset:2px}
+.cal__grid{display:grid;grid-template-columns:repeat(7,1fr);gap:4px}
+.cal__sem{text-align:center;font-size:12px;color:var(--texto-gris)}
+.dia{height:40px;background:var(--blanco);border:1px solid transparent;border-radius:8px;color:var(--texto);font:400 14px var(--fuente-mono);cursor:pointer}
+.dia:hover:not(:disabled){background:var(--rosa-claro)}
+.dia--hoy{border-color:var(--gris-linea)}
+.dia--rango{background:var(--rosa-claro);color:var(--rojo)}
+.dia--sel,.dia--sel:hover:not(:disabled){background:var(--rojo);color:#FFFFFF}
+.dia:disabled{color:var(--texto-gris);background:transparent;opacity:.5;cursor:not-allowed}
+.dia--ocupado:disabled{background:var(--rosa-claro);color:var(--rojo);text-decoration:line-through;opacity:1}
+.cal__leyenda{display:flex;gap:16px;margin:0}
+.leyenda{display:inline-flex;align-items:center;gap:8px}
+.leyenda::before{content:"";width:12px;height:12px;border-radius:4px}
+.leyenda--sel::before{background:var(--rojo)}
+.leyenda--ocu::before{background:var(--rosa-claro);border:1px solid var(--rojo)}
+.fechas{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+.campo-fecha{min-height:40px;display:flex;align-items:center;padding:8px 12px;background:var(--blanco);border:1px solid var(--gris-linea);border-radius:8px;font:400 14px var(--fuente-mono)}
+.campo-fecha--vacio{font-family:var(--fuente-texto);color:var(--texto-gris)}
+
+/* 9) Objetos perdidos ------------------------------------- */
+input[type="search"]{-webkit-appearance:none;appearance:none}
+.barra-filtros{display:grid;grid-template-columns:2fr 1fr;gap:16px;align-items:start}
+.item__desc{margin:0;font-size:14px;color:var(--texto-gris)}
+.paginacion{display:flex;flex-wrap:wrap;justify-content:center;align-items:center;gap:8px}
+.paginacion[hidden]{display:none}
+.paginacion .btn{width:auto}
+.paginacion .btn:disabled{opacity:.5;cursor:not-allowed}
+.pag-num{min-width:40px;height:40px;padding:0 8px;background:var(--blanco);border:1px solid var(--gris-linea);border-radius:8px;color:var(--texto);font:400 14px var(--fuente-mono);cursor:pointer}
+.pag-num:hover{border-color:var(--rojo)}
+.pag-num[aria-current="page"]{background:var(--rosa-claro);border-color:var(--rojo);color:var(--rojo)}
+.pag-num:focus-visible{outline:2px solid var(--rojo);outline-offset:2px}
+.pag-punto{color:var(--texto-gris)}
+@media (max-width:720px){.barra-filtros{grid-template-columns:1fr}}
+
+/* 10) Calendario de eventos (Servicios) ------------------- */
+.agenda{display:grid;grid-template-columns:minmax(0,340px) 1fr;gap:24px;align-items:start}
+.agenda .cal__leyenda{justify-content:space-between;align-items:center}
+.dia{position:relative}
+.dia--evento::after{content:"";position:absolute;left:50%;bottom:5px;width:4px;height:4px;margin-left:-2px;border-radius:50%;background:var(--rojo)}
+.dia--sel.dia--evento::after{background:#FFFFFF}
+.leyenda--evento::before{width:6px;height:6px;margin:0 3px;border-radius:50%;background:var(--rojo)}
+.detalle,.eventos{display:flex;flex-direction:column;gap:12px}
+.evento{display:flex;flex-direction:column;gap:8px;padding:16px;background:var(--blanco);border:1px solid var(--gris-linea);border-radius:8px}
+.evento__hora{margin:0;font:400 14px var(--fuente-mono);color:var(--texto)}
+@media (max-width:720px){.agenda{grid-template-columns:1fr}}

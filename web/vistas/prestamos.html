@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Préstamos · Biblioteca UTR</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Archivo:wght@600;700&family=JetBrains+Mono:wght@400&family=Public+Sans:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../styles/styles.css">
+</head>
+<body>
+<main class="pagina">
+  <a class="link" href="servicios.html">← Volver a servicios</a>
+  <header class="encabezado">
+    <img class="logo" src="../../img/UTRLOGO.png" alt="Logotipo de la Universidad Tecnológica El Retoño">
+    <h1>Préstamos</h1>
+    <p class="encabezado__sub">Elige lo que necesitas y aparta tus fechas.</p>
+  </header>
+
+  <div id="aviso" class="aviso" role="status" hidden></div>
+
+  <div class="tabs tabs--filtros" role="group" aria-label="Filtrar por categoría">
+    <button class="tab" type="button" data-filtro="todos" aria-pressed="true">Todos</button>
+    <button class="tab" type="button" data-filtro="libros" aria-pressed="false">Libros</button>
+    <button class="tab" type="button" data-filtro="computadoras" aria-pressed="false">Computadoras</button>
+    <button class="tab" type="button" data-filtro="equiposElectronicos" aria-pressed="false">Equipos electrónicos</button>
+  </div>
+
+  <section class="seccion" data-categoria="libros" aria-labelledby="t-libros">
+    <div class="seccion__head"><h2 id="t-libros">Libros</h2><span class="help" data-conteo></span></div>
+    <div class="items" data-lista><p class="vacio">Cargando catálogo…</p></div>
+  </section>
+  <section class="seccion" data-categoria="computadoras" aria-labelledby="t-compu">
+    <div class="seccion__head"><h2 id="t-compu">Computadoras de la biblioteca</h2><span class="help" data-conteo></span></div>
+    <div class="items" data-lista><p class="vacio">Cargando catálogo…</p></div>
+  </section>
+  <section class="seccion" data-categoria="equiposElectronicos" aria-labelledby="t-equipos">
+    <div class="seccion__head"><h2 id="t-equipos">Equipos electrónicos</h2><span class="help" data-conteo></span></div>
+    <div class="items" data-lista><p class="vacio">Cargando catálogo…</p></div>
+  </section>
+</main>
+
+<!-- Solicitud de préstamo con mini calendario -->
+<dialog class="modal" id="modal" aria-labelledby="m-titulo">
+  <div class="modal__cuerpo">
+    <div><h2 id="m-titulo">Solicitar préstamo</h2><p class="help" id="m-item"></p></div>
+    <div class="cal">
+      <div class="cal__nav">
+        <button type="button" class="icono-btn" id="cal-prev" aria-label="Mes anterior">‹</button>
+        <strong class="cal__mes" id="cal-mes" aria-live="polite"></strong>
+        <button type="button" class="icono-btn" id="cal-next" aria-label="Mes siguiente">›</button>
+      </div>
+      <div class="cal__grid" id="cal-grid"></div>
+      <p class="cal__leyenda help"><span class="leyenda leyenda--sel">Elegido</span><span class="leyenda leyenda--ocu">Ocupado</span></p>
+    </div>
+    <div class="fechas">
+      <div class="dato"><span class="etiqueta">Inicio</span><div class="campo-fecha" id="f-inicio"></div></div>
+      <div class="dato"><span class="etiqueta">Devolución</span><div class="campo-fecha" id="f-fin"></div></div>
+    </div>
+    <p class="help" id="m-msg" aria-live="polite"></p>
+    <button class="btn" id="m-confirmar" type="button">Confirmar solicitud</button>
+    <button class="link" id="m-cancelar" type="button">Cancelar</button>
+  </div>
+</dialog>
+
+<script src="../js/comun.js" defer></script>
+<script src="../js/api.js" defer></script>
+<script src="../js/prestamos.js" defer></script>
+</body>
+</html>
