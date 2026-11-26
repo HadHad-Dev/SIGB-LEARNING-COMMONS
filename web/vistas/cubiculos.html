@@ -38,7 +38,7 @@
 
   <div class="seccion" aria-label="Reglas de reserva">
     <div class="fechas">
-      <div class="dato"><span class="etiqueta">Horario de reservas</span><span><span class="mono">07:30</span> a <span class="mono">16:30</span> · máximo 1 hora</span></div>
+      <div class="dato"><span class="etiqueta">Horario de reservas</span><span><span class="mono">07:30</span> a <span class="mono">16:30</span> · máximo 2 hora</span></div>
       <div class="dato"><span class="etiqueta">Disponibilidad de hoy</span><span class="mono" id="hoy">2026-11-25</span></div>
     </div>
   </div>
@@ -135,15 +135,17 @@
             <option value="" disabled>Selecciona duración</option>
             <option value="30">30 minutos</option>
             <option value="60" selected>1 hora</option>
+            <option value="90">1 hora 30 minutos</option>
+            <option value="120">2 horas</option>
           </select>
-          <p class="help">Máximo 1 hora.</p>
+          <p class="help">Máximo 2 horas.</p>
         </div>
       </div>
       <p class="help" id="r-resumen">Cubículo América · 08:00 a 09:00 (1 hora).</p>
       <p class="help" id="r-msg" aria-live="polite"></p>
       <div class="row">
         <label class="btn" id="r-confirmar" for="res-ok">Confirmar reserva</label>
-        <label class="btn btn--secundario" for="res-error">Faltan datos / horario</label>
+        
         <a class="link" id="r-cancelar" href="cubiculos.html">Cancelar</a>
       </div>
     </div>

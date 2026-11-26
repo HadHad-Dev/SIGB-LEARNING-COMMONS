@@ -2,7 +2,7 @@
 import tkinter as tk
 from config import COLORES, FUENTES, ESTADOS
 from utils import crear_tarjeta_kpi, crear_tarjeta_base
-
+from database import conexion
 
 class CubiculosView(tk.Frame):
     def __init__(self, parent):
@@ -11,7 +11,7 @@ class CubiculosView(tk.Frame):
         # Datos simulados (mockup): nombre -> (capacidad, estado, usuario, inicio, fin)
         # El orden de escritura define la posición en la cuadrícula del mapa
         self.datos_cubiculos = {
-            "Oceania": (4, "ocupado", "Ana López", "09:00", "11:00"),
+            "Oceania": (4,"ocupado", "Ana López", "09:00", "11:00"),
             "Asia": (4, "disponible", "—", "—", "—"),
             "Europa": (6, "llave", "Diego Ruiz", "10:30", "12:30"),
             "America": (6, "disponible", "—", "—", "—"),
@@ -40,12 +40,13 @@ class CubiculosView(tk.Frame):
         # KPIs
         kpi_frame = tk.Frame(self, bg=COLORES["blanco_fondo"], padx=20)
         kpi_frame.pack(fill="x", pady=10)
-        kpis = [
-            ("TOTAL DE CUBÍCULOS", "6", "Capacidad total de 36"),
-            ("DISPONIBLES", "2", "Listos para reservar"),
-            ("OCUPADOS", "4", "1 requiere entrega de llave"),
-            ("HORAS DE USO HOY", "18 h", "Acumuladas en el día"),
-        ]
+        kpis = {"Total de cubiculos": 0, "Cubiculos disponibles": 0,"Cubiculos ocupados": 0,"horas de uso": 0}
+        # kpis = [
+        #     ("TOTAL DE CUBÍCULOS", "6", "Capacidad total de 36"),
+        #     ("DISPONIBLES", "2", "Listos para reservar"),
+        #     ("OCUPADOS", "4", "1 requiere entrega de llave"),
+        #     ("HORAS DE USO HOY", "18 h", "Acumuladas en el día"),
+        # ]
         for i, (t, v, s) in enumerate(kpis):
             crear_tarjeta_kpi(kpi_frame, t, v, s).grid(row=0, column=i, padx=5, sticky="ew")
             kpi_frame.grid_columnconfigure(i, weight=1)

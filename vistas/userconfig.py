@@ -36,9 +36,7 @@ class UserconfigView(tk.Frame):
         self.notebook = ttk.Notebook(main_content)
         self.notebook.pack(fill="both", expand=True)
 
-        for texto, constructor in [("Perfil de Usuario", self.construir_perfil),
-                                   ("Ajustes Generales", self.construir_ajustes),
-                                   ("Apariencia y Base de Datos", self.construir_bd)]:
+        for texto, constructor in [("Perfil de Usuario", self.construir_perfil)]:
             frame = tk.Frame(self.notebook, bg=COLORES["blanco_fondo"],
                              highlightbackground=COLORES["gris_linea"], highlightthickness=1)
             self.notebook.add(frame, text=texto)
@@ -100,42 +98,3 @@ class UserconfigView(tk.Frame):
         botones.pack(fill="x", padx=15, pady=15)
         self._boton_primario(botones, "Guardar cambios").pack(side="right")
         self._boton_secundario(botones, "Cancelar").pack(side="right", padx=10)
-
-    # ---------- Pestaña 2: Ajustes generales ----------
-    def construir_ajustes(self, parent):
-        horario = self._tarjeta(parent, "Horario de la biblioteca")
-        horas = [f"{h:02d}:00" for h in range(6, 23)]
-        self._combo(horario, 0, "Hora de apertura", horas, "08:00")
-        self._combo(horario, 1, "Hora de cierre", horas, "20:00")
-
-        reservas = self._tarjeta(parent, "Reservas de cubículos")
-        self._combo(reservas, 0, "Tolerancia (minutos)", ["5", "10", "15", "20", "30"], "15")
-
-        notif = self._tarjeta(parent, "Notificaciones")
-        self.var_notif = tk.BooleanVar(value=True)
-        tk.Checkbutton(notif, text="Activar notificaciones del sistema", variable=self.var_notif,
-                       font=FUENTES["texto_normal"], bg=COLORES["gris_claro"],
-                       activebackground=COLORES["gris_claro"], selectcolor=COLORES["blanco_fondo"],
-                       fg=COLORES["texto_principal"], cursor="hand2").grid(row=0, column=0, columnspan=2, sticky="w")
-
-        botones = tk.Frame(parent, bg=COLORES["blanco_fondo"])
-        botones.pack(fill="x", padx=15, pady=15)
-        self._boton_primario(botones, "Guardar ajustes").pack(side="right")
-
-    # ---------- Pestaña 3: Apariencia y BD ----------
-    def construir_bd(self, parent):
-        info = self._tarjeta(parent, "Sistema y base de datos")
-        filas = [("Versión del software", "v1.0.0", COLORES["texto_principal"]),
-                 ("Motor de base de datos", "SQLite (local)", COLORES["texto_principal"]),
-                 ("Estado de la conexión", "Conectado", ESTADOS["disponible_texto"]),
-                 ("Último respaldo", "12 Nov 2026 · 18:30", COLORES["texto_principal"])]
-        for fila, (campo, valor, color) in enumerate(filas):
-            tk.Label(info, text=campo.upper(), bg=COLORES["gris_claro"], fg=COLORES["texto_ayuda"],
-                     font=FUENTES["etiqueta"]).grid(row=fila, column=0, sticky="w", pady=8, padx=(0, 20))
-            tk.Label(info, text=valor, bg=COLORES["gris_claro"], fg=color,
-                     font=FUENTES["texto_normal"]).grid(row=fila, column=1, sticky="w", pady=8)
-
-        botones = tk.Frame(parent, bg=COLORES["blanco_fondo"])
-        botones.pack(fill="x", padx=15, pady=15)
-        self._boton_primario(botones, "Respaldar base de datos").pack(side="right")
-        self._boton_secundario(botones, "Probar conexión").pack(side="right", padx=10)

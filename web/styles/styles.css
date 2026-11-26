@@ -535,3 +535,16 @@ input[type="search"]{-webkit-appearance:none;appearance:none}
   letter-spacing:0;
   font:500 16px var(--fuente-texto);
 }
+
+.aviso--reserva-ok,
+.aviso--reserva-error {
+  display: none;
+}
+
+#res-ok:checked ~ .aviso--reserva-ok {
+  display: block;
+}
+
+#res-error:checked ~ .aviso--reserva-error {
+  display: block;
+}
