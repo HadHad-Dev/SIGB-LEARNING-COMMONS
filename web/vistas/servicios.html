@@ -3,72 +3,55 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<title>Servicios de biblioteca · UTR</title>
+<title>Servicios · Biblioteca UTR</title>
+<link rel="icon" type="image/png" href="../../img/UTRLOGO.png">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Archivo:wght@600;700&family=JetBrains+Mono:wght@400&family=Public+Sans:wght@400;500&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="../styles/styles.css">
 </head>
 <body>
-<main class="pantalla-centrada pantalla-centrada--columna">
-  <header class="encabezado">
-    <img class="logo" src="../../img/UTRLOGO.png" alt="Logotipo de la Universidad Tecnológica El Retoño">
-    <h1>Servicios de biblioteca</h1>
-    <p class="encabezado__sub">Elige el servicio que necesitas hoy.</p>
-  </header>
-
-  <section class="contenedor servicios" aria-label="Servicios disponibles">
-    <a class="servicio" href="prestamos.html">
-      <span class="servicio__icono" aria-hidden="true">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="4" height="16" rx="1"/><rect x="9" y="4" width="4" height="16" rx="1"/><path d="M15.2 5.6l3.8-1 3 14.2-3.8 1z"/></svg>
-      </span>
-      <h2>Préstamos</h2>
-      <p>Pide libros y consulta su disponibilidad.</p>
-      <span class="servicio__accion">Ver catálogo →</span>
-    </a>
-
-    <a class="servicio" href="objetos-perdidos.html">
-      <span class="servicio__icono" aria-hidden="true">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3 11V9a5 5 0 0 1 5-5h8a5 5 0 0 1 5 5v2"/><rect x="3" y="11" width="18" height="9" rx="1.5"/><path d="M12 11v3"/><circle cx="12" cy="16" r="1"/></svg>
-      </span>
-      <h2>Objetos perdidos</h2>
-      <p>Revisa o reporta artículos olvidados.</p>
-      <span class="servicio__accion">Ver objetos →</span>
-    </a>
-
-    <a class="servicio" href="cubiculos.html">
-      <span class="servicio__icono" aria-hidden="true">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M6 21V4a1 1 0 0 1 1-1h10a1 1 0 0 1 1 1v17M4 21h16"/><circle cx="15" cy="12.5" r=".9" fill="currentColor"/></svg>
-      </span>
-      <h2>Reserva de cubículos</h2>
-      <p>Aparta un espacio y revisa su estado.</p>
-      <span class="servicio__accion">Ver cubículos →</span>
-    </a>
-  </section>
-
-  <div id="aviso" class="aviso contenedor" role="status" hidden></div>
-
-  <section class="contenedor seccion" aria-labelledby="t-calendario">
-    <div class="seccion__head"><h2 id="t-calendario">Calendario de eventos</h2><span class="help">Elige un día para ver las actividades.</span></div>
-    <div class="agenda">
-      <div class="cal">
-        <div class="cal__nav">
-          <button type="button" class="icono-btn" id="ev-prev" aria-label="Mes anterior">‹</button>
-          <strong class="cal__mes" id="ev-mes" aria-live="polite"></strong>
-          <button type="button" class="icono-btn" id="ev-next" aria-label="Mes siguiente">›</button>
-        </div>
-        <div class="cal__grid" id="ev-grid"></div>
-        <p class="cal__leyenda help"><span class="leyenda leyenda--evento">Con eventos</span><button type="button" class="link" id="ev-hoy">Ir a hoy</button></p>
-      </div>
-      <div class="detalle" aria-live="polite">
-        <span class="etiqueta">Eventos del día</span>
-        <h3 id="ev-fecha"></h3>
-        <div class="eventos" id="ev-lista"></div>
-      </div>
+<div class="pantalla-centrada pantalla-centrada--columna">
+  <div class="contenedor">
+    <div>
+      <a class="link" href="login.html">← Regresar a inicio de sesión</a>
     </div>
-  </section>
-</main>
-<script src="../js/comun.js" defer></script>
-<script src="../js/api.js" defer></script>
-<script src="../js/servicios.js" defer></script>
+
+    <div class="encabezado">
+      <img class="logo" src="../../img/UTRLOGO.png" alt="Logotipo de la Universidad Tecnológica El Retoño">
+      <h1>Servicios de la biblioteca</h1>
+      <p class="encabezado__sub">Elige el módulo que necesitas consultar o utilizar.</p>
+      <hr>
+    </div>
+
+    <div class="servicios" aria-label="Servicios disponibles">
+      <a class="servicio" href="prestamos.html">
+        <div class="servicio__icono" aria-hidden="true">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="4" height="16" rx="1"/><rect x="9" y="4" width="4" height="16" rx="1"/><path d="M15.2 5.6l3.8-1 3 14.2-3.8 1z"/></svg>
+        </div>
+        <h2>Préstamos</h2>
+        <p>Consulta libros, computadoras y utilería del inventario con su estado actual.</p>
+        <span class="servicio__accion">Ir a préstamos →</span>
+      </a>
+
+      <a class="servicio" href="cubiculos.html">
+        <div class="servicio__icono" aria-hidden="true">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M9 3v18"/><path d="M9 12h12"/></svg>
+        </div>
+        <h2>Cubículos</h2>
+        <p>Revisa la disponibilidad de los espacios de estudio y gestiona tu reserva.</p>
+        <span class="servicio__accion">Ir a cubículos →</span>
+      </a>
+
+      <a class="servicio" href="objetos-perdidos.html">
+        <div class="servicio__icono" aria-hidden="true">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/><polyline points="3.27 6.96 12 12.01 20.73 6.96"/><line x1="12" y1="22.08" x2="12" y2="12"/></svg>
+        </div>
+        <h2>Objetos perdidos</h2>
+        <p>Consulta los artículos en custodia o entregados y aparta el cubículo de entrega.</p>
+        <span class="servicio__accion">Ir a objetos perdidos →</span>
+      </a>
+    </div>
+  </div>
+</div>
 </body>
 </html>

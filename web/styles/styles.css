@@ -2,7 +2,7 @@
    Biblioteca UTR · Hoja de estilos compartida
    Basada en la Guía de Estilos oficial.
    Secciones: 1) Variables  2) Base  3) Tarjeta  4) Formularios
-              5) Botones y enlaces  6) Componentes de Login  7) Servicios  8) Préstamos  9) Objetos perdidos  10) Calendario de eventos
+              5) Botones y enlaces  6) Componentes de Login  7) Servicios  8) Préstamos  9) Objetos perdidos  10) Calendario de eventos (comentado)  11) Selección de perfil sin JS
    ========================================================== */
 
 /* 1) Variables ------------------------------------------- */
@@ -394,7 +394,8 @@ input[type="search"]{-webkit-appearance:none;appearance:none}
 .pag-punto{color:var(--texto-gris)}
 @media (max-width:720px){.barra-filtros{grid-template-columns:1fr}}
 
-/* 10) Calendario de eventos (Servicios) ------------------- */
+/* 10) Calendario de eventos (Servicios) - comentado para entrega estática HTML/CSS */
+/*
 .agenda{display:grid;grid-template-columns:minmax(0,340px) 1fr;gap:24px;align-items:start}
 .agenda .cal__leyenda{justify-content:space-between;align-items:center}
 .dia{position:relative}
@@ -405,3 +406,132 @@ input[type="search"]{-webkit-appearance:none;appearance:none}
 .evento{display:flex;flex-direction:column;gap:8px;padding:16px;background:var(--blanco);border:1px solid var(--gris-linea);border-radius:8px}
 .evento__hora{margin:0;font:400 14px var(--fuente-mono);color:var(--texto)}
 @media (max-width:720px){.agenda{grid-template-columns:1fr}}
+*/
+
+/* 11) Selección de perfil sin JavaScript mediante radio buttons */
+.rol-radio{
+  display:none;
+}
+
+.tabs--radio .tab{
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  text-transform:none;
+  letter-spacing:0;
+  font:500 16px var(--fuente-texto);
+}
+
+#rol-est:checked ~ .tabs--radio label[for="rol-est"],
+#rol-inv:checked ~ .tabs--radio label[for="rol-inv"],
+#rol-adm:checked ~ .tabs--radio label[for="rol-adm"],
+#reg-est:checked ~ .tabs--radio label[for="reg-est"],
+#reg-inv:checked ~ .tabs--radio label[for="reg-inv"],
+#reg-adm:checked ~ .tabs--radio label[for="reg-adm"],
+#flt-todos:checked ~ .tabs--radio label[for="flt-todos"],
+#flt-libros:checked ~ .tabs--radio label[for="flt-libros"],
+#flt-compu:checked ~ .tabs--radio label[for="flt-compu"],
+#flt-equipos:checked ~ .tabs--radio label[for="flt-equipos"]{
+  background:var(--rosa-claro);
+  color:var(--rojo);
+  border-bottom-color:var(--rojo);
+}
+
+#rol-est:checked ~ .panel--inv,
+#rol-est:checked ~ .panel--adm,
+#rol-inv:checked ~ .panel--est,
+#rol-inv:checked ~ .panel--adm,
+#rol-adm:checked ~ .panel--est,
+#rol-adm:checked ~ .panel--inv,
+#reg-est:checked ~ .panel--inv,
+#reg-est:checked ~ .panel--adm,
+#reg-inv:checked ~ .panel--est,
+#reg-inv:checked ~ .panel--adm,
+#reg-adm:checked ~ .panel--est,
+#reg-adm:checked ~ .panel--inv{
+  display:none;
+}
+
+#rol-est:checked ~ .panel--est,
+#rol-inv:checked ~ .panel--inv,
+#rol-adm:checked ~ .panel--adm,
+#reg-est:checked ~ .panel--est,
+#reg-inv:checked ~ .panel--inv,
+#reg-adm:checked ~ .panel--adm{
+  display:flex;
+}
+
+#flt-libros:checked ~ .seccion--compu,
+#flt-libros:checked ~ .seccion--equipos,
+#flt-compu:checked ~ .seccion--libros,
+#flt-compu:checked ~ .seccion--equipos,
+#flt-equipos:checked ~ .seccion--libros,
+#flt-equipos:checked ~ .seccion--compu{
+  display:none;
+}
+
+#flt-todos:checked ~ .seccion--libros,
+#flt-todos:checked ~ .seccion--compu,
+#flt-todos:checked ~ .seccion--equipos,
+#flt-libros:checked ~ .seccion--libros,
+#flt-compu:checked ~ .seccion--compu,
+#flt-equipos:checked ~ .seccion--equipos{
+  display:flex;
+}
+
+#rol-est:focus-visible ~ .tabs--radio label[for="rol-est"],
+#rol-inv:focus-visible ~ .tabs--radio label[for="rol-inv"],
+#rol-adm:focus-visible ~ .tabs--radio label[for="rol-adm"],
+#reg-est:focus-visible ~ .tabs--radio label[for="reg-est"],
+#reg-inv:focus-visible ~ .tabs--radio label[for="reg-inv"],
+#reg-adm:focus-visible ~ .tabs--radio label[for="reg-adm"],
+#flt-todos:focus-visible ~ .tabs--radio label[for="flt-todos"],
+#flt-libros:focus-visible ~ .tabs--radio label[for="flt-libros"],
+#flt-compu:focus-visible ~ .tabs--radio label[for="flt-compu"],
+#flt-equipos:focus-visible ~ .tabs--radio label[for="flt-equipos"]{
+  outline:2px solid var(--rojo);
+  outline-offset:2px;
+}
+
+/* Estados de aviso de solicitud en Préstamos sin JS */
+.aviso--solicitud-ok,
+.aviso--solicitud-error{
+  display:none;
+}
+
+#sol-ok:checked ~ .aviso--solicitud-ok{
+  display:block;
+}
+
+#sol-error:checked ~ .aviso--solicitud-error{
+  display:block;
+}
+
+.row label.btn{
+  width:auto;
+  display:inline-flex;
+  align-items:center;
+  justify-content:center;
+  text-transform:none;
+  letter-spacing:0;
+  font:500 16px var(--fuente-texto);
+}
+
+/* Menú desplegable de Apartar en Objetos perdidos sin JavaScript */
+.item .menu-apartar{
+  display:none;
+}
+
+.item .apartar-toggle:checked ~ .menu-apartar{
+  display:flex;
+}
+
+.item label.btn{
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  margin-top:auto;
+  text-transform:none;
+  letter-spacing:0;
+  font:500 16px var(--fuente-texto);
+}
