@@ -18,7 +18,7 @@ from reportes_excel import exportar_tabla_excel
 
 
 class LibrosView(tk.Frame):
-    def __init__(self, parent, admin_id=1001):
+    def __init__(self, parent, admin_id=1):
         super().__init__(parent, bg=COLORES["blanco_fondo"])
         self.admin_id = admin_id
         self.datos_libros = []

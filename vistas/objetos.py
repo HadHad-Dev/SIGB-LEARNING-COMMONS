@@ -14,7 +14,7 @@ from database.objetos_db import (
 class ObjetosView(tk.Frame):
     PLACEHOLDER = "Buscar por objeto, lugar o persona..."
 
-    def __init__(self, parent, admin_id=1001):
+    def __init__(self, parent, admin_id=1):
         super().__init__(parent, bg=COLORES["blanco_fondo"])
         self.admin_id = admin_id
         self.datos_objetos = []

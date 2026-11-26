@@ -60,7 +60,6 @@ class AppPrincipal(tk.Tk):
         self.cambiar_vista(DashboardView)
 
     def cambiar_vista(self, ClaseVista):
-        #Destruye la pantalla actual y carga la nueva
         if self.vista_actual is not None:
             self.vista_actual.destroy()
             
