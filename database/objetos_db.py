@@ -59,6 +59,7 @@ def obtener_kpis_objetos():
 
 
 def obtener_objetos(filtro=""):
+    """Retorna los objetos perdidos con el nombre del reportante y receptor desde user."""
     conexion = obtener_conexion()
     if conexion is None:
         return []
@@ -129,6 +130,7 @@ def registrar_objeto(titulo, descripcion, ubicacion, reportado_por):
         conexion.close()
 
 def marcar_objeto_entregado(item_id, admin_id, entregado_a):
+    """Cambia el objeto a 'entregado' guardando fecha, admin y user_id del receptor."""
     conexion = obtener_conexion()
     if conexion is None:
         return False, "No hay conexión con la base de datos."
@@ -153,7 +155,10 @@ def marcar_objeto_entregado(item_id, admin_id, entregado_a):
     finally:
         cursor.close()
         conexion.close()
+
+
 def regresar_objeto_custodia(item_id):
+    """Regresa un objeto a 'en_custodia' limpiando los campos de entrega."""
     conexion = obtener_conexion()
     if conexion is None:
         return False, "No hay conexión con la base de datos."
