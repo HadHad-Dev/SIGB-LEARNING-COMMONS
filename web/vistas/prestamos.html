@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Préstamos · Biblioteca UTR</title>
+<link rel="icon" type="image/png" href="../../img/UTRLOGO.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Archivo:wght@600;700&family=JetBrains+Mono:wght@400&family=Public+Sans:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../styles/styles.css">
+</head>
+<body>
+<div class="pagina">
+  <a class="link" href="servicios.html">← Volver a servicios</a>
+  <div class="encabezado">
+    <img class="logo" src="../../img/UTRLOGO.png" alt="Logotipo de la Universidad Tecnológica El Retoño">
+    <h1>Préstamos de inventario</h1>
+    <p class="encabezado__sub">Consulta recursos de cómputo, libros y utilería registrados en la biblioteca.</p>
+  </div>
+
+  <input class="rol-radio" type="radio" name="filtro_prestamo" id="flt-todos" checked>
+  <input class="rol-radio" type="radio" name="filtro_prestamo" id="flt-libros">
+  <input class="rol-radio" type="radio" name="filtro_prestamo" id="flt-compu">
+  <input class="rol-radio" type="radio" name="filtro_prestamo" id="flt-equipos">
+
+  <input class="rol-radio" type="radio" name="estado_solicitud" id="sol-none" checked>
+  <input class="rol-radio" type="radio" name="estado_solicitud" id="sol-ok">
+  <input class="rol-radio" type="radio" name="estado_solicitud" id="sol-error">
+
+  <div class="tabs tabs--radio tabs--filtros" role="tablist" aria-label="Filtrar recursos por categoría">
+    <label class="tab" for="flt-todos">Todos</label>
+    <label class="tab" for="flt-libros">Libros</label>
+    <label class="tab" for="flt-compu">Computadoras</label>
+    <label class="tab" for="flt-equipos">Equipos electrónicos</label>
+  </div>
+
+  <div class="aviso aviso--ok aviso--solicitud-ok" role="status">
+    <div class="row">
+      <span>Solicitud registrada para el recurso seleccionado según las políticas del catálogo.</span>
+      <label class="link" for="sol-none">Cerrar</label>
+    </div>
+  </div>
+
+  <div class="aviso aviso--error aviso--solicitud-error" role="status">
+    <div class="row">
+      <span>El recurso seleccionado no está disponible o requiere devolución en recepción.</span>
+      <label class="link" for="sol-none">Cerrar</label>
+    </div>
+  </div>
+
+  <!-- Computadoras (category_id = 1 · máximo 120 min) -->
+  <div class="seccion seccion--compu" aria-labelledby="t-compu">
+    <div class="seccion__head">
+      <h2 id="t-compu">Computadoras</h2>
+      <span class="help">Máximo 120 min</span>
+    </div>
+    <div class="items">
+      <div class="item">
+        <h3>Computadora Dell OptiPlex 01</h3>
+        <div class="dato"><span class="etiqueta">Código</span><span class="mono">PC-01</span></div>
+        <div class="dato"><span class="etiqueta">Ubicación</span><span>Zona Cómputo</span></div>
+        <div class="dato"><span class="etiqueta">Estado</span><span>disponible</span></div>
+        <label class="btn" for="sol-ok">Solicitar préstamo</label>
+      </div>
+
+      <div class="item">
+        <h3>Computadora Dell OptiPlex 02</h3>
+        <div class="dato"><span class="etiqueta">Código</span><span class="mono">PC-02</span></div>
+        <div class="dato"><span class="etiqueta">Ubicación</span><span>Zona Cómputo</span></div>
+        <div class="dato"><span class="etiqueta">Estado</span><span>en_uso</span></div>
+        <label class="btn btn--secundario" for="sol-error">Ver estado</label>
+      </div>
+    </div>
+  </div>
+
+  <!-- Libros (category_id = 5 · máximo 480 min · devolución física) -->
+  <div class="seccion seccion--libros" aria-labelledby="t-libros">
+    <div class="seccion__head">
+      <h2 id="t-libros">Libros</h2>
+      <span class="help">Máximo 480 min · Devolución física</span>
+    </div>
+    <div class="items">
+      <div class="item">
+        <h3>Clean Code</h3>
+        <div class="dato"><span class="etiqueta">Código</span><span class="mono">LIB-001</span></div>
+        <div class="dato"><span class="etiqueta">Autor / Ubicación</span><span>Robert C. Martin · Estante A1</span></div>
+        <div class="dato"><span class="etiqueta">Estado</span><span>disponible</span></div>
+        <label class="btn" for="sol-ok">Solicitar préstamo</label>
+      </div>
+
+      <div class="item">
+        <h3>Fundamentos de Bases de Datos</h3>
+        <div class="dato"><span class="etiqueta">Código</span><span class="mono">LIB-002</span></div>
+        <div class="dato"><span class="etiqueta">Autor / Ubicación</span><span>Silberschatz · Estante A2</span></div>
+        <div class="dato"><span class="etiqueta">Estado</span><span>en_uso</span></div>
+        <label class="btn btn--secundario" for="sol-error">Ver estado</label>
+      </div>
+
+      <div class="item">
+        <h3>Python Crash Course</h3>
+        <div class="dato"><span class="etiqueta">Código</span><span class="mono">LIB-003</span></div>
+        <div class="dato"><span class="etiqueta">Autor / Ubicación</span><span>Eric Matthes · Estante A1</span></div>
+        <div class="dato"><span class="etiqueta">Estado</span><span>mantenimiento</span></div>
+        <label class="btn btn--secundario" for="sol-error">Ver estado</label>
+      </div>
+
+      <div class="item">
+        <h3>Introducción a los Algoritmos</h3>
+        <div class="dato"><span class="etiqueta">Código</span><span class="mono">LIB-004</span></div>
+        <div class="dato"><span class="etiqueta">Autor / Ubicación</span><span>Thomas H. Cormen · Estante A1</span></div>
+        <div class="dato"><span class="etiqueta">Estado</span><span>disponible</span></div>
+        <label class="btn" for="sol-ok">Solicitar préstamo</label>
+      </div>
+
+      <div class="item">
+        <h3>Redes de Computadoras</h3>
+        <div class="dato"><span class="etiqueta">Código</span><span class="mono">LIB-005</span></div>
+        <div class="dato"><span class="etiqueta">Autor / Ubicación</span><span>Andrew S. Tanenbaum · Estante B1</span></div>
+        <div class="dato"><span class="etiqueta">Estado</span><span>disponible</span></div>
+        <label class="btn" for="sol-ok">Solicitar préstamo</label>
+      </div>
+
+      <div class="item">
+        <h3>Patrones de Diseño</h3>
+        <div class="dato"><span class="etiqueta">Código</span><span class="mono">LIB-018</span></div>
+        <div class="dato"><span class="etiqueta">Autor / Ubicación</span><span>Erich Gamma · Estante A3</span></div>
+        <div class="dato"><span class="etiqueta">Estado</span><span>extraviado</span></div>
+        <label class="btn btn--secundario" for="sol-error">Ver estado</label>
+      </div>
+    </div>
+  </div>
+
+  <!-- Equipos electrónicos / Utilería (category_id = 6 · máximo 180 min · devolución física) -->
+  <div class="seccion seccion--equipos" aria-labelledby="t-equipos">
+    <div class="seccion__head">
+      <h2 id="t-equipos">Equipos electrónicos y utilería</h2>
+      <span class="help">Máximo 180 min · Devolución física</span>
+    </div>
+    <div class="items">
+      <div class="item">
+        <h3>Audífonos Sony WH</h3>
+        <div class="dato"><span class="etiqueta">Código</span><span class="mono">UTL-001</span></div>
+        <div class="dato"><span class="etiqueta">Ubicación</span><span>Recepción</span></div>
+        <div class="dato"><span class="etiqueta">Estado</span><span>disponible</span></div>
+        <label class="btn" for="sol-ok">Solicitar préstamo</label>
+      </div>
+    </div>
+  </div>
+</div>
+</body>
+</html>

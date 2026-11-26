@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Cubículos · Biblioteca UTR</title>
+<link rel="icon" type="image/png" href="../../img/UTRLOGO.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Archivo:wght@600;700&family=JetBrains+Mono:wght@400&family=Public+Sans:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../styles/styles.css">
+</head>
+<body>
+<div class="pagina">
+  <a class="link" href="servicios.html">← Volver a servicios</a>
+  <div class="encabezado">
+    <img class="logo" src="../../img/UTRLOGO.png" alt="Logotipo de la Universidad Tecnológica El Retoño">
+    <h1>Cubículos</h1>
+    <p class="encabezado__sub">Aparta un espacio para estudiar hasta por 1 hora.</p>
+  </div>
+
+  <input class="rol-radio" type="radio" name="estado_reserva" id="res-none" checked>
+  <input class="rol-radio" type="radio" name="estado_reserva" id="res-ok">
+  <input class="rol-radio" type="radio" name="estado_reserva" id="res-error">
+
+  <div class="aviso aviso--ok aviso--reserva-ok" role="status">
+    <div class="row">
+      <span>La reserva del cubículo se realizó correctamente dentro del horario permitido.</span>
+      <label class="link" for="res-none">Cerrar</label>
+    </div>
+  </div>
+
+  <div class="aviso aviso--error aviso--reserva-error" role="status">
+    <div class="row">
+      <span>Completa la selección de cubículo, hora de inicio y duración válida (máximo 1 hora) o elige un horario disponible.</span>
+      <label class="link" for="res-none">Cerrar</label>
+    </div>
+  </div>
+
+  <div class="seccion" aria-label="Reglas de reserva">
+    <div class="fechas">
+      <div class="dato"><span class="etiqueta">Horario de reservas</span><span><span class="mono">07:30</span> a <span class="mono">16:30</span> · máximo 1 hora</span></div>
+      <div class="dato"><span class="etiqueta">Disponibilidad de hoy</span><span class="mono" id="hoy">2026-11-25</span></div>
+    </div>
+  </div>
+
+  <div>
+    <p class="cal__leyenda help"><span class="leyenda leyenda--libre">Libre</span><span class="leyenda leyenda--reservado">Reservado</span><span class="leyenda leyenda--ocupado">Ocupado</span></p>
+  </div>
+
+  <div class="cubiculos items" id="lista" aria-label="Cubículos">
+    <div class="item">
+      <h3>Cubículo América</h3>
+      <div class="dato"><span class="etiqueta">Capacidad</span><span class="mono">6 personas</span></div>
+      <div class="dato"><span class="etiqueta">Estado</span><span>Libre</span></div>
+      <a class="btn" href="#modal">Reservar cubículo</a>
+    </div>
+
+    <div class="item">
+      <h3>Cubículo Europa</h3>
+      <div class="dato"><span class="etiqueta">Capacidad</span><span class="mono">6 personas</span></div>
+      <div class="dato"><span class="etiqueta">Estado</span><span>Libre</span></div>
+      <a class="btn" href="#modal">Reservar cubículo</a>
+    </div>
+
+    <div class="item">
+      <h3>Cubículo Asia</h3>
+      <div class="dato"><span class="etiqueta">Capacidad</span><span class="mono">6 personas</span></div>
+      <div class="dato"><span class="etiqueta">Estado</span><span>Reservado</span></div>
+      <a class="btn btn--secundario" href="#modal">Ver / reservar horario</a>
+    </div>
+
+    <div class="item">
+      <h3>Cubículo África</h3>
+      <div class="dato"><span class="etiqueta">Capacidad</span><span class="mono">6 personas</span></div>
+      <div class="dato"><span class="etiqueta">Estado</span><span>Libre</span></div>
+      <a class="btn" href="#modal">Reservar cubículo</a>
+    </div>
+
+    <div class="item">
+      <h3>Cubículo Oceanía</h3>
+      <div class="dato"><span class="etiqueta">Capacidad</span><span class="mono">6 personas</span></div>
+      <div class="dato"><span class="etiqueta">Estado</span><span>Ocupado</span></div>
+      <span class="help">No disponible en este momento</span>
+    </div>
+  </div>
+
+  <!-- Reservar un cubículo -->
+  <div class="modal" id="modal" aria-labelledby="m-titulo">
+    <div class="modal__cuerpo">
+      <div>
+        <h2 id="m-titulo">Reservar cubículo</h2>
+        <p class="help" id="m-info">Selecciona el cubículo y un horario disponible entre 07:30 y 16:30 (máximo 1 hora).</p>
+      </div>
+      <div class="field">
+        <label for="r-cub">Cubículo</label>
+        <select id="r-cub" required>
+          <option value="" disabled>Selecciona un cubículo</option>
+          <option value="CUB-AMERICA" selected>Cubículo América (Libre)</option>
+          <option value="CUB-EUROPA">Cubículo Europa (Libre)</option>
+          <option value="CUB-ASIA">Cubículo Asia (Reservado)</option>
+          <option value="CUB-AFRICA">Cubículo África (Libre)</option>
+          <option value="CUB-OCEANIA">Cubículo Oceanía (Ocupado)</option>
+        </select>
+        <p class="help">Elige el cubículo que quieres usar.</p>
+      </div>
+      <div class="fechas">
+        <div class="field">
+          <label for="r-inicio">Hora de inicio</label>
+          <select id="r-inicio" required>
+            <option value="" disabled>Selecciona hora de inicio</option>
+            <option value="07:30">07:30</option>
+            <option value="08:00" selected>08:00</option>
+            <option value="08:30">08:30</option>
+            <option value="09:00" disabled>09:00 (Ocupado/Reservado)</option>
+            <option value="09:30" disabled>09:30 (Ocupado/Reservado)</option>
+            <option value="10:00">10:00</option>
+            <option value="10:30">10:30</option>
+            <option value="11:00">11:00</option>
+            <option value="11:30">11:30</option>
+            <option value="12:00">12:00</option>
+            <option value="12:30">12:30</option>
+            <option value="13:00">13:00</option>
+            <option value="13:30">13:30</option>
+            <option value="14:00">14:00</option>
+            <option value="14:30">14:30</option>
+            <option value="15:00">15:00</option>
+            <option value="15:30">15:30</option>
+            <option value="16:00">16:00</option>
+          </select>
+          <p class="help">Las horas apartadas salen bloqueadas.</p>
+        </div>
+        <div class="field">
+          <label for="r-dur">Duración</label>
+          <select id="r-dur" required>
+            <option value="" disabled>Selecciona duración</option>
+            <option value="30">30 minutos</option>
+            <option value="60" selected>1 hora</option>
+          </select>
+          <p class="help">Máximo 1 hora.</p>
+        </div>
+      </div>
+      <p class="help" id="r-resumen">Cubículo América · 08:00 a 09:00 (1 hora).</p>
+      <p class="help" id="r-msg" aria-live="polite"></p>
+      <div class="row">
+        <label class="btn" id="r-confirmar" for="res-ok">Confirmar reserva</label>
+        <label class="btn btn--secundario" for="res-error">Faltan datos / horario</label>
+        <a class="link" id="r-cancelar" href="cubiculos.html">Cancelar</a>
+      </div>
+    </div>
+  </div>
+</div>
+</body>
+</html>

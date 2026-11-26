@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Objetos perdidos · Biblioteca UTR</title>
+<link rel="icon" type="image/png" href="../../img/UTRLOGO.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Archivo:wght@600;700&family=JetBrains+Mono:wght@400&family=Public+Sans:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../styles/styles.css">
+</head>
+<body>
+<div class="pagina">
+  <a class="link" href="servicios.html">← Volver a servicios</a>
+  <div class="encabezado">
+    <img class="logo" src="../../img/UTRLOGO.png" alt="Logotipo de la Universidad Tecnológica El Retoño">
+    <h1>Objetos perdidos</h1>
+    <p class="encabezado__sub">Consulta el catálogo de artículos reportados en la biblioteca.</p>
+  </div>
+
+  <div id="aviso" class="aviso" role="status" hidden></div>
+
+  <div class="seccion" aria-labelledby="t-filtros">
+    <div class="seccion__head"><h2 id="t-filtros">Buscar y filtrar artículos</h2><span class="help">4 artículos registrados</span></div>
+    <div class="barra-filtros">
+      <div class="field">
+        <label for="buscar-objeto">Buscar por palabra clave</label>
+        <input id="buscar-objeto" type="search" placeholder="Ej. termo, calculadora, credencial, cargador">
+      </div>
+      <div class="field">
+        <label for="estado-objeto">Estado del artículo</label>
+        <select id="estado-objeto">
+          <option value="todos" selected>Todos</option>
+          <option value="en_custodia">en_custodia</option>
+          <option value="entregado">entregado</option>
+        </select>
+      </div>
+    </div>
+  </div>
+
+  <div class="seccion" aria-labelledby="t-objetos">
+    <div class="seccion__head"><h2 id="t-objetos">Artículos reportados</h2><span class="help">Página 1 de 1</span></div>
+    <div class="items">
+      <div class="item">
+        <h3>Termo metálico azul</h3>
+        <p class="item__desc">Encontrado debajo de la mesa central, marca Yeti.</p>
+        <div class="dato"><span class="etiqueta">Ubicación</span><span>Sala General</span></div>
+        <div class="dato"><span class="etiqueta">Estado</span><span class="mono">en_custodia</span></div>
+      </div>
+
+      <div class="item">
+        <h3>Calculadora científica Casio</h3>
+        <p class="item__desc">Modelo fx-991 con etiqueta borrosa atrás.</p>
+        <div class="dato"><span class="etiqueta">Ubicación</span><span>Cubículo 02</span></div>
+        <div class="dato"><span class="etiqueta">Estado</span><span class="mono">en_custodia</span></div>
+      </div>
+
+      <div class="item">
+        <h3>Credencial UTR</h3>
+        <p class="item__desc">Encontrada junto a la impresora de recepción.</p>
+        <div class="dato"><span class="etiqueta">Ubicación</span><span>Recepción</span></div>
+        <div class="dato"><span class="etiqueta">Estado</span><span class="mono">en_custodia</span></div>
+      </div>
+
+      <div class="item">
+        <h3>Cargador USB-C blanco</h3>
+        <p class="item__desc">Dejado conectado tras cerrar turno.</p>
+        <div class="dato"><span class="etiqueta">Ubicación</span><span>Cubículo 01</span></div>
+        <div class="dato"><span class="etiqueta">Estado</span><span class="mono">entregado</span></div>
+      </div>
+    </div>
+
+    <div class="paginacion" aria-label="Paginación de objetos perdidos">
+      <button class="btn" type="button" disabled>Anterior</button>
+      <span class="pag-num" aria-current="page">1</span>
+      <button class="btn" type="button" disabled>Siguiente</button>
+    </div>
+  </div>
+</div>
+</body>
+</html>
