@@ -1,4 +1,3 @@
-
 DROP DATABASE IF EXISTS sigb_learning_commons;
 CREATE DATABASE sigb_learning_commons
     CHARACTER SET utf8mb4
@@ -34,9 +33,6 @@ CREATE TABLE inventory_resource (
     CONSTRAINT chk_resource_capacity CHECK (capacity IS NULL OR capacity > 0)
 );
 
--- ============================================================================
--- 3. USER
--- ============================================================================
 CREATE TABLE user (
     user_id         INT UNSIGNED PRIMARY KEY,
     full_name       VARCHAR(120) NOT NULL,
@@ -110,9 +106,6 @@ CREATE TABLE active_usage (
     CONSTRAINT chk_active_attendees CHECK (attendees_count >= 1)
 );
 
--- ============================================================================
--- 5. USAGE_HISTORY
--- ============================================================================
 CREATE TABLE usage_history (
     history_id      INT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
     user_id         INT UNSIGNED NOT NULL,
@@ -217,7 +210,6 @@ INSERT INTO inventory_resource (bar_code, category_id, description_title, author
     ('LIB-003', 5, 'Python Crash Course',           'Eric Matthes',     NULL, 'mantenimiento', 'Estante A1'),
     ('UTL-001', 6, 'Audífonos Sony WH',             NULL,               NULL, 'disponible',    'Recepción');
 
--- 3. Usuarios
 INSERT INTO user (user_id, full_name, user_type, gender, password, major, quarter, teacher_type, department_area, phone) VALUES
     (1001, 'Carlos Méndez',            'administrador',  NULL, 'admin123', NULL,   NULL, NULL,  NULL,   NULL),
     (5479, 'José Javier López Chávez', 'alumno',         'M',  '1234',     'TDSM', 4,    NULL,  NULL,   NULL),

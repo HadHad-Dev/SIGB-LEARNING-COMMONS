@@ -1,193 +1,397 @@
-# vistas/objetos.py
 import tkinter as tk
-from tkinter import ttk
+from tkinter import ttk, messagebox
+
 from config import COLORES, FUENTES, ESTADOS
 from utils import crear_tarjeta_kpi, crear_tarjeta_base
+from database.objetos_db import (
+    obtener_kpis_objetos,
+    obtener_objetos,
+    registrar_objeto,
+    marcar_objeto_entregado,
+    regresar_objeto_custodia,
+)
 
 class ObjetosView(tk.Frame):
-    def __init__(self, parent):
+    PLACEHOLDER = "Buscar por objeto, lugar o persona..."
+
+    def __init__(self, parent, admin_id=1001):
         super().__init__(parent, bg=COLORES["blanco_fondo"])
-        
-        self.datos_objetos = [
-            {"id": 1, "titulo": "Mochila negra", "estado": "En custodia", "ubicacion": "Learning commons - Planta baja", "fecha": "3 nov 2026 - 09:15", "reporto": "Mariana López", "img_src": "/ruta/img/mochila.jpg"},
-            {"id": 2, "titulo": "Audífonos inalámbricos", "estado": "Entregado", "ubicacion": "Edificio B - Piso 1", "fecha": "2 nov 2026 - 16:40", "reporto": "Carlos Méndez", "img_src": "/ruta/img/audifonos.jpg"},
-            {"id": 3, "titulo": "Botella térmica", "estado": "En custodia", "ubicacion": "Learning commons - Piso 2", "fecha": "2 nov 2026 - 14:20", "reporto": "Sofía Hernández", "img_src": "/ruta/img/botella.jpg"},
-            {"id": 4, "titulo": "Calculadora científica", "estado": "En custodia", "ubicacion": "Edificio c - Estudio para diseño", "fecha": "1 nov 2026 - 12:10", "reporto": "Andrés García", "img_src": "/ruta/img/calculadora.jpg"},
-            {"id": 5, "titulo": "Cuaderno de apuntes", "estado": "Entregado", "ubicacion": "Edificio D - Recepcion", "fecha": "31 oct 2026 - 18:05", "reporto": "Elena Martínez", "img_src": "/ruta/img/cuaderno.jpg"},
-            {"id": 6, "titulo": "Lentes de armazón", "estado": "Entregado", "ubicacion": "Cafeteria", "fecha": "30 oct 2026 - 10:35", "reporto": "Pablo Sánchez", "img_src": "/ruta/img/lentes.jpg"},
-            {"id": 7, "titulo": "Llaves de auto", "estado": "En custodia", "ubicacion": "Estacionamiento segunda fila primer seccion", "fecha": "3 nov 2026 - 08:00", "reporto": "Guardia Turno 1", "img_src": "/ruta/img/llaves.jpg"},
-            {"id": 8, "titulo": "Sudadera gris", "estado": "Entregado", "ubicacion": "Salida al oxxo", "fecha": "2 nov 2026 - 13:15", "reporto": "Luis Torres", "img_src": "/ruta/img/sudadera.jpg"},
-            {"id": 9, "titulo": "Mouse inalámbrico", "estado": "En custodia", "ubicacion": "Edificio D - Laboratorio con impresoras 3D", "fecha": "1 nov 2026 - 11:45", "reporto": "Ana Ruíz", "img_src": "/ruta/img/mouse.jpg"},
-            {"id": 10, "titulo": "Termo Yeti", "estado": "En custodia", "ubicacion": "Edificio Vinculacion - Servicios de internalizacion", "fecha": "31 oct 2026 - 19:20", "reporto": "José López", "img_src": "/ruta/img/termo2.jpg"},
-            {"id": 11, "titulo": "Memoria USB 64GB", "estado": "Entregado", "ubicacion": "Paraescolares", "fecha": "30 oct 2026 - 09:30", "reporto": "Mónica Silva", "img_src": "/ruta/img/usb.jpg"},
-            {"id": 12, "titulo": "Cargador tipo C", "estado": "En custodia", "ubicacion": "Learning commons - cubiculo Africa", "fecha": "29 oct 2026 - 15:10", "reporto": "Daniel Castro", "img_src": "/ruta/img/cargador.jpg"}
-        ]
+        self.admin_id = admin_id
+        self.datos_objetos = []
+
         self.setup()
+        self.cargar_datos()
 
     def setup(self):
-
         header = tk.Frame(self, bg=COLORES["blanco_fondo"], pady=10, padx=20)
         header.pack(fill="x")
-        
-        tk.Label(header, text="Objetos perdidos", font=FUENTES["titulo"], 
-                 fg=COLORES["texto_principal"], bg=COLORES["blanco_fondo"]).pack(side="left")
-        
-        tk.Label(header, text="Registra hallazgos y ayuda a cada objeto a volver con su dueño.", 
-                 font=FUENTES["texto_ayuda"], fg=COLORES["texto_ayuda"], bg=COLORES["blanco_fondo"]).pack(side="left", padx=15)
 
-        # Boton para registrar pendiente funcionalidad
-        btn_registrar = tk.Button(header, text="Registrar objeto", bg=COLORES["rojo_principal"], 
-                                  fg=COLORES["blanco_fondo"], font=FUENTES["texto_normal"], 
-                                  bd=0, padx=20, pady=8, cursor="hand2")
+        tk.Label(
+            header, text="Objetos perdidos", font=FUENTES["titulo"],
+            fg=COLORES["texto_principal"], bg=COLORES["blanco_fondo"]
+        ).pack(side="left")
+
+        tk.Label(
+            header, text="Registra hallazgos y ayuda a cada objeto a volver con su dueño.",
+            font=FUENTES["texto_ayuda"], fg=COLORES["texto_ayuda"], bg=COLORES["blanco_fondo"]
+        ).pack(side="left", padx=15)
+
+        btn_registrar = tk.Button(
+            header, text="Registrar objeto", bg=COLORES["rojo_principal"],
+            fg=COLORES["blanco_fondo"], font=FUENTES["texto_normal"],
+            bd=0, padx=20, pady=8, cursor="hand2",
+            command=self.abrir_modal_registro
+        )
         btn_registrar.pack(side="right")
 
-        # Contenedor de data
-        kpi_frame = tk.Frame(self, bg=COLORES["blanco_fondo"], padx=20)
-        kpi_frame.pack(fill="x", pady=10)
-        
-        kpis = [
-            ("Objetos registrados", "48", ""),
-            ("En custodia", "12", ""),
-            ("Entregados", "36", "")
-        ]
-        for i, (t, v, s) in enumerate(kpis):
-            crear_tarjeta_kpi(kpi_frame, t, v, s).grid(row=0, column=i, padx=5, sticky="ew")
-            kpi_frame.grid_columnconfigure(i, weight=1)
+        self.kpi_frame = tk.Frame(self, bg=COLORES["blanco_fondo"], padx=20)
+        self.kpi_frame.pack(fill="x", pady=10)
 
         search_frame = tk.Frame(self, bg=COLORES["blanco_fondo"], padx=25)
         search_frame.pack(fill="x", pady=5)
-        
-    # Barra de busqueda aun sin funcionalidad
 
-        search_container = tk.Frame(search_frame, bg=COLORES["blanco_fondo"], 
-                                    highlightbackground=COLORES["gris_linea"], highlightthickness=1, padx=5, pady=5)
+        search_container = tk.Frame(
+            search_frame, bg=COLORES["blanco_fondo"],
+            highlightbackground=COLORES["gris_linea"], highlightthickness=1, padx=8, pady=6
+        )
         search_container.pack(side="left", fill="x", expand=True)
-        
-        tk.Label(search_container, bg=COLORES["blanco_fondo"], fg=COLORES["texto_ayuda"]).pack(side="left")
-        entry_busqueda = tk.Entry(search_container, bg=COLORES["blanco_fondo"], bd=0, font=FUENTES["texto_normal"], width=50)
-        entry_busqueda.insert(0, "Buscar por objeto, lugar o persona...")
-        entry_busqueda.pack(side="left", fill="x", expand=True, padx=5)
 
-       #No se puede hacer scroll por defaul en tkinter pipipi
+        self.entry_busqueda = tk.Entry(
+            search_container, bg=COLORES["blanco_fondo"],
+            fg=COLORES["texto_ayuda"], bd=0, font=FUENTES["texto_normal"]
+        )
+        self.entry_busqueda.insert(0, self.PLACEHOLDER)
+        self.entry_busqueda.pack(side="left", fill="x", expand=True, padx=5)
+
+        self.entry_busqueda.bind("<FocusIn>", self._quitar_placeholder)
+        self.entry_busqueda.bind("<FocusOut>", self._poner_placeholder)
+        self.entry_busqueda.bind("<KeyRelease>", self._filtrar_objetos)
 
         scroll_container = tk.Frame(self, bg=COLORES["blanco_fondo"], padx=20)
         scroll_container.pack(fill="both", expand=True, pady=15)
-        #verificar porque algunas "variables" como esta no estan declaradas con self
-        canvas = tk.Canvas(scroll_container, bg=COLORES["blanco_fondo"])
-        scrollbar = ttk.Scrollbar(scroll_container, orient="vertical", command=canvas.yview)
-        #verificar que es ttk
-        self.grid_frame = tk.Frame(canvas, bg=COLORES["blanco_fondo"])
 
-        #Checar funcionamiento de todo esto todo el frame de scroll
-        # Actualizar la región de scroll cada vez que el grid cambie de tamaño
-        self.grid_frame.bind("<Configure>", lambda e: canvas.configure(scrollregion=canvas.bbox("all")))
-        canvas.create_window((0, 0), window=self.grid_frame, anchor="nw", width=canvas.winfo_width())
-        # Ajustar el ancho interno cuando cambie el tamaño del canvas
-        canvas.bind("<Configure>", lambda e: canvas.itemconfig(canvas.find_withtag("all")[0], width=e.width))
+        self.canvas = tk.Canvas(scroll_container, bg=COLORES["blanco_fondo"], highlightthickness=0)
+        scrollbar = ttk.Scrollbar(scroll_container, orient="vertical", command=self.canvas.yview)
+        self.grid_frame = tk.Frame(self.canvas, bg=COLORES["blanco_fondo"])
 
-        canvas.configure(yscrollcommand=scrollbar.set)
-        
-        canvas.pack(side="left", fill="both", expand=True)
+        self.grid_frame.bind(
+            "<Configure>",
+            lambda e: self.canvas.configure(scrollregion=self.canvas.bbox("all"))
+        )
+        self.canvas_window = self.canvas.create_window((0, 0), window=self.grid_frame, anchor="nw")
+        self.canvas.bind(
+            "<Configure>",
+            lambda e: self.canvas.itemconfig(self.canvas_window, width=e.width)
+        )
+        self.canvas.configure(yscrollcommand=scrollbar.set)
+
+        self.canvas.bind("<Enter>", lambda e: self.canvas.bind_all("<MouseWheel>", self._scroll_mouse))
+        self.canvas.bind("<Leave>", lambda e: self.canvas.unbind_all("<MouseWheel>"))
+
+        self.canvas.pack(side="left", fill="both", expand=True)
         scrollbar.pack(side="right", fill="y")
 
+    def _scroll_mouse(self, event):
+        self.canvas.yview_scroll(int(-1 * (event.delta / 120)), "units")
+
+    def _quitar_placeholder(self, event):
+        if self.entry_busqueda.get() == self.PLACEHOLDER:
+            self.entry_busqueda.delete(0, tk.END)
+            self.entry_busqueda.config(fg=COLORES["texto_principal"])
+
+    def _poner_placeholder(self, event):
+        if not self.entry_busqueda.get().strip():
+            self.entry_busqueda.insert(0, self.PLACEHOLDER)
+            self.entry_busqueda.config(fg=COLORES["texto_ayuda"])
+
+    def _filtrar_objetos(self, event=None):
+        texto = self.entry_busqueda.get()
+        if texto == self.PLACEHOLDER:
+            texto = ""
+        self.datos_objetos = obtener_objetos(filtro=texto)
         self.construir_cuadricula()
 
+
+    def cargar_datos(self):
+        self._render_kpis()
+        self._filtrar_objetos()
+
+    def _limpiar_frame(self, frame):
+        for widget in frame.winfo_children():
+            widget.destroy()
+
+    def _render_kpis(self):
+        self._limpiar_frame(self.kpi_frame)
+        kpis = obtener_kpis_objetos()
+        tarjetas = [
+            ("OBJETOS REGISTRADOS", str(kpis["total"]), "Total histórico"),
+            ("EN CUSTODIA", str(kpis["en_custodia"]), "Esperando a su dueño"),
+            ("ENTREGADOS", str(kpis["entregados"]), "Devueltos correctamente"),
+        ]
+        for i, (t, v, s) in enumerate(tarjetas):
+            crear_tarjeta_kpi(self.kpi_frame, t, v, s).grid(row=0, column=i, padx=5, sticky="ew")
+            self.kpi_frame.grid_columnconfigure(i, weight=1)
+
     def construir_cuadricula(self):
-        #Checar porque maneja una lista de diccionarios en lugar de una  matriz 
-        # checar que es enumerate
+        self._limpiar_frame(self.grid_frame)
+
+        if not self.datos_objetos:
+            tk.Label(
+                self.grid_frame, text="No se encontraron objetos registrados.",
+                font=FUENTES["texto_normal"], bg=COLORES["blanco_fondo"],
+                fg=COLORES["texto_ayuda"]
+            ).pack(pady=40)
+            return
+
+        for col in range(3):
+            self.grid_frame.grid_columnconfigure(col, weight=1, uniform="col_obj")
+
         for i, obj in enumerate(self.datos_objetos):
             row = i // 3
             col = i % 3
-            #Operaacio necesaria para acomodar los elementos segun cantidad , verificarla para que la expliqeu 
-            
-            card = crear_tarjeta_base(self.grid_frame, pad_x=10, pad_y=10)
+
+            card = crear_tarjeta_base(self.grid_frame, pad_x=12, pad_y=12)
             card.grid(row=row, column=col, padx=10, pady=10, sticky="nsew")
-            self.grid_frame.grid_columnconfigure(col, weight=1)
-            
-            img_placeholder = tk.Frame(card, bg="#D0D0D0", height=120)
-            img_placeholder.pack(fill="x", pady=(0, 10))
-            tk.Label(img_placeholder, text=f"[IMAGEN]\n{obj['img_src']}", bg="#D0D0D0", 
-                     fg=COLORES["texto_ayuda"], font=FUENTES["etiqueta"]).pack(expand=True)
-            
+
+            # Cabecera de tarjeta: Título + Estado
             header_card = tk.Frame(card, bg=COLORES["gris_claro"])
             header_card.pack(fill="x")
-            
-            tk.Label(header_card, text=obj["titulo"], font=FUENTES["texto_normal"], 
-                     bg=COLORES["gris_claro"], fg=COLORES["texto_principal"], anchor="w").pack(side="left")
-            
-            # Asignar color según estado
-            if obj["estado"] == "En custodia":
-                color_estado = ESTADOS["llave_texto"]
-            
-            else:
-                ESTADOS["disponible_texto"]
-            tk.Label(header_card, text=obj["estado"], font=FUENTES["etiqueta"], 
-                     bg=COLORES["gris_claro"], fg=color_estado).pack(side="right")
-            
-            # Detalles del objeto
-            tk.Label(card, text=f"{obj['ubicacion']}", font=FUENTES["texto_ayuda"], 
-                     bg=COLORES["gris_claro"], fg=COLORES["texto_ayuda"], anchor="w").pack(fill="x", pady=(5,0))
-            tk.Label(card, text=f" {obj['fecha']}", font=FUENTES["texto_ayuda"], 
-                     bg=COLORES["gris_claro"], fg=COLORES["texto_ayuda"], anchor="w").pack(fill="x")
-            
-            # Separador
-            tk.Frame(card, bg=COLORES["gris_linea"], height=1).pack(fill="x", pady=8)
-            tk.Label(card, text=f"👤 Reportó: {obj['reporto']}", font=FUENTES["texto_ayuda"], 
-                     bg=COLORES["gris_claro"], fg=COLORES["texto_ayuda"], anchor="w").pack(fill="x")
 
-            # HACER LA TARJETA CLICKEABLE:
-            # Vinculamos el evento clic izquierdo ("<Button-1>") de la tarjeta y todos sus hijos al modal
+            tk.Label(
+                header_card, text=obj["title"], font=FUENTES["subtitulo"],
+                bg=COLORES["gris_claro"], fg=COLORES["texto_principal"],
+                anchor="w", wraplength=180, justify="left"
+            ).pack(side="left", fill="x", expand=True)
+
+            if obj["status"] == "en_custodia":
+                texto_estado = "En custodia"
+                color_estado = ESTADOS["llave_texto"]
+            else:
+                texto_estado = "Entregado"
+                color_estado = ESTADOS["disponible_texto"]
+
+            tk.Label(
+                header_card, text=texto_estado, font=FUENTES["etiqueta"],
+                bg=COLORES["gris_claro"], fg=color_estado
+            ).pack(side="right", anchor="n")
+
+            # Descripción breve
+            desc_corta = obj["description"]
+            if len(desc_corta) > 95:
+                desc_corta = desc_corta[:92] + "..."
+
+            tk.Label(
+                card, text=desc_corta, font=FUENTES["texto_normal"],
+                bg=COLORES["gris_claro"], fg=COLORES["texto_principal"],
+                anchor="w", justify="left", wraplength=250
+            ).pack(fill="x", pady=(8, 6))
+
+            # Ubicación y fecha
+            ubicacion = obj["found_location"] or "Sin ubicación"
+            fecha_txt = obj["found_date"].strftime("%d/%m/%Y - %H:%M")
+
+            tk.Label(
+                card, text=f"Lugar: {ubicacion}", font=FUENTES["texto_ayuda"],
+                bg=COLORES["gris_claro"], fg=COLORES["texto_ayuda"], anchor="w"
+            ).pack(fill="x")
+
+            tk.Label(
+                card, text=f"Fecha: {fecha_txt}", font=FUENTES["texto_ayuda"],
+                bg=COLORES["gris_claro"], fg=COLORES["texto_ayuda"], anchor="w"
+            ).pack(fill="x")
+
+            # Separador y reportante
+            tk.Frame(card, bg=COLORES["gris_linea"], height=1).pack(fill="x", pady=8)
+            tk.Label(
+                card, text=f"Reportó: {obj['reporto']}", font=FUENTES["texto_ayuda"],
+                bg=COLORES["gris_claro"], fg=COLORES["texto_ayuda"], anchor="w"
+            ).pack(fill="x")
+
             self.hacer_clickeable(card, obj)
 
-    #buscar en que se hace la recursividad ,que expliqeu su funcionamiento
     def hacer_clickeable(self, widget, datos_objeto):
-        widget.bind("<Button-1>", lambda e, data=datos_objeto: self.abrirventana(data))
-        # que expliqe desde porque ees recursviva , que son los <> , los datos que tipo de variable son al igual que el widget
-        widget.configure(cursor="hand2") 
+        widget.bind("<Button-1>", lambda e, data=datos_objeto: self.abrir_ventana_detalle(data))
+        widget.configure(cursor="hand2")
         for child in widget.winfo_children():
             self.hacer_clickeable(child, datos_objeto)
 
-    def abrirventana(self, obj):
+    # ========================================================================
+    # MODAL: REGISTRAR NUEVO OBJETO
+    # ========================================================================
+
+    def abrir_modal_registro(self):
         modal = tk.Toplevel(self)
-        modal.title(f"Detalles - {obj['titulo']}")
+        modal.title("Registrar objeto perdido")
+        modal.geometry("450x430")
+        modal.configure(bg=COLORES["blanco_fondo"])
+        modal.transient(self.winfo_toplevel())
+        modal.grab_set()
+
+        frame = tk.Frame(modal, bg=COLORES["blanco_fondo"], padx=20, pady=15)
+        frame.pack(fill="both", expand=True)
+
+        tk.Label(
+            frame, text="Nuevo objeto encontrado", font=FUENTES["subtitulo"],
+            bg=COLORES["blanco_fondo"], fg=COLORES["texto_principal"]
+        ).pack(anchor="w", pady=(0, 12))
+
+        tk.Label(frame, text="Nombre del objeto *", bg=COLORES["blanco_fondo"], font=FUENTES["etiqueta"]).pack(anchor="w")
+        entry_titulo = tk.Entry(frame, font=FUENTES["texto_normal"])
+        entry_titulo.pack(fill="x", pady=(2, 10))
+
+        tk.Label(frame, text="Descripción *", bg=COLORES["blanco_fondo"], font=FUENTES["etiqueta"]).pack(anchor="w")
+        txt_desc = tk.Text(frame, font=FUENTES["texto_normal"], height=4)
+        txt_desc.pack(fill="x", pady=(2, 10))
+
+        tk.Label(frame, text="Ubicación donde se encontró", bg=COLORES["blanco_fondo"], font=FUENTES["etiqueta"]).pack(anchor="w")
+        entry_ubicacion = tk.Entry(frame, font=FUENTES["texto_normal"])
+        entry_ubicacion.pack(fill="x", pady=(2, 10))
+
+        tk.Label(
+            frame, text="Quién lo reportó (ID de usuario o Nombre completo) *",
+            bg=COLORES["blanco_fondo"], font=FUENTES["etiqueta"]
+        ).pack(anchor="w")
+        entry_reporto = tk.Entry(frame, font=FUENTES["texto_normal"])
+        entry_reporto.pack(fill="x", pady=(2, 15))
+
+        def guardar():
+            titulo = entry_titulo.get().strip()
+            desc = txt_desc.get("1.0", tk.END).strip()
+            ubicacion = entry_ubicacion.get().strip()
+            reporto = entry_reporto.get().strip()
+
+            if not titulo or not desc or not reporto:
+                messagebox.showwarning(
+                    "Campos obligatorios",
+                    "Completa el nombre del objeto, la descripción y quién lo reportó."
+                )
+                return
+
+            ok, msg = registrar_objeto(titulo, desc, ubicacion, reporto)
+            if ok:
+                messagebox.showinfo("Éxito", msg)
+                modal.destroy()
+                self.cargar_datos()
+            else:
+                messagebox.showerror("Error", msg)
+
+        tk.Button(
+            frame, text="Guardar registro", bg=COLORES["rojo_principal"],
+            fg=COLORES["blanco_fondo"], font=FUENTES["texto_normal"],
+            bd=0, pady=10, cursor="hand2", command=guardar
+        ).pack(fill="x")
+
+    # ========================================================================
+    # MODAL: DETALLE Y CAMBIO DE ESTADO
+    # ========================================================================
+
+    def abrir_ventana_detalle(self, obj):
+        modal = tk.Toplevel(self)
+        modal.title(f"Detalles - {obj['title']}")
         modal.geometry("500x500")
         modal.configure(bg=COLORES["blanco_fondo"])
-        #Elimina interaccion con la pantalla mientras esta abierta la de info
-        #investigar su funcionamiento 
         modal.transient(self.winfo_toplevel())
-        modal.grab_set() 
+        modal.grab_set()
 
-        # Contenido
-        tk.Label(modal, text=obj["titulo"], font=FUENTES["titulo"], 
-                 bg=COLORES["blanco_fondo"], fg=COLORES["texto_principal"]).pack(pady=(20, 5))
-        #investigar porque si bien se esta utilizando un diccioanrio, para acceder al emento se una comilla individual
-        tk.Label(modal, text=f"Estado actual: {obj['estado']}", font=FUENTES["subtitulo"], 
-                 bg=COLORES["blanco_fondo"], fg=COLORES["texto_ayuda"]).pack(pady=5)
-                 
-        datos_frame = tk.Frame(modal, bg=COLORES["gris_claro"], padx=20, pady=20, 
-                               highlightbackground=COLORES["gris_linea"], highlightthickness=1)
-        datos_frame.pack(fill="x", padx=30, pady=15)
-        
-        tk.Label(datos_frame, text=f" Ubicación original:\n{obj['ubicacion']}", font=FUENTES["texto_normal"], 
-                 bg=COLORES["gris_claro"], fg=COLORES["texto_principal"], justify="left").pack(anchor="w", pady=5)
-                 
-        tk.Label(datos_frame, text=f"📅 Fecha y hora de registro:\n{obj['fecha']}", font=FUENTES["texto_normal"], 
-                 bg=COLORES["gris_claro"], fg=COLORES["texto_principal"], justify="left").pack(anchor="w", pady=5)
+        estado_legible = "En custodia" if obj["status"] == "en_custodia" else "Entregado"
 
-        # Botones de acción
-        tk.Label(modal, text="Cambiar estado del objeto:", font=FUENTES["etiqueta"], 
-                 bg=COLORES["blanco_fondo"], fg=COLORES["texto_ayuda"]).pack(pady=(10,0))
-                 
-        botones_frame = tk.Frame(modal, bg=COLORES["blanco_fondo"])
-        botones_frame.pack(pady=10)
+        tk.Label(
+            modal, text=obj["title"], font=FUENTES["titulo"],
+            bg=COLORES["blanco_fondo"], fg=COLORES["texto_principal"]
+        ).pack(pady=(20, 5))
 
-        #Entregado
-        tk.Button(botones_frame, text="Marcar como Entregado", bg=ESTADOS["disponible_texto"], 
-                  fg=COLORES["blanco_fondo"], font=FUENTES["texto_normal"], bd=0, padx=10, pady=8).pack(side="left", padx=5)
-        
-        #Custodia
-        tk.Button(botones_frame, text="Mantener En custodia", bg=ESTADOS["llave_texto"], 
-                  fg=COLORES["blanco_fondo"], font=FUENTES["texto_normal"], bd=0, padx=10, pady=8).pack(side="left", padx=5)
+        tk.Label(
+            modal, text=f"Estado actual: {estado_legible}", font=FUENTES["subtitulo"],
+            bg=COLORES["blanco_fondo"], fg=COLORES["texto_ayuda"]
+        ).pack(pady=2)
 
-        tk.Button(modal, text="Cerrar ventana", bg=COLORES["blanco_fondo"], fg=COLORES["texto_principal"], 
-                  font=FUENTES["texto_normal"], bd=0, command=modal.destroy).pack(pady=10)
+        datos_frame = tk.Frame(
+            modal, bg=COLORES["gris_claro"], padx=20, pady=15,
+            highlightbackground=COLORES["gris_linea"], highlightthickness=1
+        )
+        datos_frame.pack(fill="x", padx=30, pady=12)
+
+        fecha_txt = obj["found_date"].strftime("%d/%m/%Y - %H:%M")
+        ubicacion = obj["found_location"] or "Sin ubicación"
+
+        info = [
+            f"Descripción:\n{obj['description']}",
+            f"Ubicación de hallazgo: {ubicacion}",
+            f"Fecha de registro: {fecha_txt}",
+            f"Reportó: {obj['reporto']}",
+        ]
+        if obj["status"] == "entregado":
+            fecha_ent = obj["delivered_at"].strftime("%d/%m/%Y - %H:%M") if obj["delivered_at"] else "-"
+            info.append(f"Entregado a: {obj['entregado_a']} ({fecha_ent})")
+
+        for linea in info:
+            tk.Label(
+                datos_frame, text=linea, font=FUENTES["texto_normal"],
+                bg=COLORES["gris_claro"], fg=COLORES["texto_principal"],
+                justify="left", wraplength=400
+            ).pack(anchor="w", pady=4)
+
+        # --- Acciones según el estado actual ---
+        acciones_frame = tk.Frame(modal, bg=COLORES["blanco_fondo"], padx=30)
+        acciones_frame.pack(fill="x", pady=5)
+
+        if obj["status"] == "en_custodia":
+            tk.Label(
+                acciones_frame, text="Entregado a (ID de usuario o Nombre completo):",
+                font=FUENTES["etiqueta"], bg=COLORES["blanco_fondo"], fg=COLORES["texto_ayuda"]
+            ).pack(anchor="w")
+
+            entry_receptor = tk.Entry(acciones_frame, font=FUENTES["texto_normal"])
+            entry_receptor.pack(fill="x", pady=(3, 10))
+
+            def confirmar_entrega():
+                receptor = entry_receptor.get().strip()
+                if not receptor:
+                    messagebox.showwarning(
+                        "Dato obligatorio",
+                        "Indica el ID o nombre de la persona que recibe el objeto."
+                    )
+                    return
+
+                ok, msg = marcar_objeto_entregado(obj["item_id"], self.admin_id, receptor)
+                if ok:
+                    messagebox.showinfo("Entregado", msg)
+                    modal.destroy()
+                    self.cargar_datos()
+                else:
+                    messagebox.showerror("Error", msg)
+
+            tk.Button(
+                acciones_frame, text="Marcar como Entregado",
+                bg=ESTADOS["disponible_texto"], fg=COLORES["blanco_fondo"],
+                font=FUENTES["texto_normal"], bd=0, padx=15, pady=8,
+                cursor="hand2", command=confirmar_entrega
+            ).pack(fill="x")
+        else:
+            def devolver_a_custodia():
+                confirmar = messagebox.askyesno(
+                    "Confirmar cambio",
+                    "¿Regresar este objeto al estado 'En custodia'?"
+                )
+                if not confirmar:
+                    return
+                ok, msg = regresar_objeto_custodia(obj["item_id"])
+                if ok:
+                    messagebox.showinfo("Actualizado", msg)
+                    modal.destroy()
+                    self.cargar_datos()
+                else:
+                    messagebox.showerror("Error", msg)
+
+            tk.Button(
+                acciones_frame, text="Regresar a En custodia",
+                bg=ESTADOS["llave_texto"], fg=COLORES["blanco_fondo"],
+                font=FUENTES["texto_normal"], bd=0, padx=15, pady=8,
+                cursor="hand2", command=devolver_a_custodia
+            ).pack(fill="x")
+
+        tk.Button(
+            modal, text="Cerrar ventana", bg=COLORES["blanco_fondo"],
+            fg=COLORES["texto_principal"], font=FUENTES["texto_normal"],
+            bd=0, cursor="hand2", command=modal.destroy
+        ).pack(pady=10)

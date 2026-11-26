@@ -8,6 +8,7 @@ from vistas.dashboard import DashboardView
 from vistas.objetos import ObjetosView
 from vistas.libros import LibrosView
 from vistas.userconfig import UserconfigView
+from vistas.ayuda import AyudaView
 class AppPrincipal(tk.Tk):
     def __init__(self):
         super().__init__()
@@ -50,7 +51,7 @@ class AppPrincipal(tk.Tk):
         
         btn_ayuda=tk.Button(self.sidebar,text="Centro de ayuda",bg=COLORES["rojo_principal"],fg=COLORES["blanco_fondo"], font=FUENTES["texto_normal"], bd=0, anchor="w", 
                                     padx=20, pady=10, activebackground=COLORES["rosa_claro"], 
-                                    command=None)
+                                    command=lambda:self.cambiar_vista(AyudaView))
         btn_ayuda.pack(fill="x",pady=0,side="bottom")
 
         self.main_container = tk.Frame(self, bg=COLORES["blanco_fondo"])
