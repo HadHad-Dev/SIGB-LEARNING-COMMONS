@@ -333,47 +333,7 @@ h3{margin:0;font-family:var(--fuente-titulo);font-weight:600;font-size:16px;colo
 .item{display:flex;flex-direction:column;gap:12px;padding:16px;background:var(--blanco);border:1px solid var(--gris-linea);border-radius:8px}
 .item__media{height:160px;display:flex;align-items:center;justify-content:center;background:var(--rosa-claro);color:var(--rojo);border-radius:8px;overflow:hidden}
 .item__media svg{width:56px;height:56px}
-.item__media img{width:100%;height:100%;object-fit:cover}
-.item__media--libros img{object-fit:contain}
-.dato{display:flex;flex-direction:column;gap:4px;font-size:14px;color:var(--texto-gris)}
-.dato .etiqueta{color:var(--texto)}
-.item .btn{margin-top:auto}
 
-/* Botón secundario (solo hay un botón rojo visible) */
-.btn--secundario{background:var(--blanco);color:var(--texto);border:1px solid var(--gris-linea)}
-.btn--secundario:hover{background:var(--blanco);border-color:var(--rojo);color:var(--rojo)}
-
-/* Avisos */
-.aviso{padding:12px 16px;border:1px solid;border-radius:8px;font-size:14px}
-.aviso[hidden]{display:none}
-.aviso--ok{background:var(--verde-claro);color:var(--verde);border-color:var(--verde)}
-.aviso--error{background:var(--rosa-claro);color:var(--rojo);border-color:var(--rojo)}
-.help--error{color:var(--rojo)}
-
-/* Ventana de solicitud con mini calendario */
-.modal{width:min(420px,calc(100% - 32px));padding:0;background:var(--gris-claro);color:var(--texto);border:1px solid var(--gris-linea);border-radius:8px}
-.modal::backdrop{background:rgba(31,26,26,.4)}
-.modal__cuerpo{display:flex;flex-direction:column;gap:16px;padding:24px}
-.modal__cuerpo .link{align-self:center}
-.cal{display:flex;flex-direction:column;gap:8px}
-.cal__nav{display:flex;align-items:center;justify-content:space-between}
-.cal__mes{font-family:var(--fuente-titulo);font-weight:600;font-size:16px}
-.icono-btn{width:40px;height:40px;background:var(--blanco);border:1px solid var(--gris-linea);border-radius:8px;color:var(--texto);font-size:20px;cursor:pointer}
-.icono-btn:disabled{opacity:.4;cursor:not-allowed}
-.icono-btn:focus-visible,.dia:focus-visible{outline:2px solid var(--rojo);outline-offset:2px}
-.cal__grid{display:grid;grid-template-columns:repeat(7,1fr);gap:4px}
-.cal__sem{text-align:center;font-size:12px;color:var(--texto-gris)}
-.dia{height:40px;background:var(--blanco);border:1px solid transparent;border-radius:8px;color:var(--texto);font:400 14px var(--fuente-mono);cursor:pointer}
-.dia:hover:not(:disabled){background:var(--rosa-claro)}
-.dia--hoy{border-color:var(--gris-linea)}
-.dia--rango{background:var(--rosa-claro);color:var(--rojo)}
-.dia--sel,.dia--sel:hover:not(:disabled){background:var(--rojo);color:#FFFFFF}
-.dia:disabled{color:var(--texto-gris);background:transparent;opacity:.5;cursor:not-allowed}
-.dia--ocupado:disabled{background:var(--rosa-claro);color:var(--rojo);text-decoration:line-through;opacity:1}
-.cal__leyenda{display:flex;gap:16px;margin:0}
-.leyenda{display:inline-flex;align-items:center;gap:8px}
-.leyenda::before{content:"";width:12px;height:12px;border-radius:4px}
-.leyenda--sel::before{background:var(--rojo)}
 .leyenda--ocu::before{background:var(--rosa-claro);border:1px solid var(--rojo)}
 .fechas{display:grid;grid-template-columns:1fr 1fr;gap:16px}
 .campo-fecha{min-height:40px;display:flex;align-items:center;padding:8px 12px;background:var(--blanco);border:1px solid var(--gris-linea);border-radius:8px;font:400 14px var(--fuente-mono)}
