@@ -354,20 +354,6 @@ input[type="search"]{-webkit-appearance:none;appearance:none}
 .pag-punto{color:var(--texto-gris)}
 @media (max-width:720px){.barra-filtros{grid-template-columns:1fr}}
 
-/* 10) Calendario de eventos (Servicios) - comentado para entrega estática HTML/CSS */
-/*
-.agenda{display:grid;grid-template-columns:minmax(0,340px) 1fr;gap:24px;align-items:start}
-.agenda .cal__leyenda{justify-content:space-between;align-items:center}
-.dia{position:relative}
-.dia--evento::after{content:"";position:absolute;left:50%;bottom:5px;width:4px;height:4px;margin-left:-2px;border-radius:50%;background:var(--rojo)}
-.dia--sel.dia--evento::after{background:#FFFFFF}
-.leyenda--evento::before{width:6px;height:6px;margin:0 3px;border-radius:50%;background:var(--rojo)}
-.detalle,.eventos{display:flex;flex-direction:column;gap:12px}
-.evento{display:flex;flex-direction:column;gap:8px;padding:16px;background:var(--blanco);border:1px solid var(--gris-linea);border-radius:8px}
-.evento__hora{margin:0;font:400 14px var(--fuente-mono);color:var(--texto)}
-@media (max-width:720px){.agenda{grid-template-columns:1fr}}
-*/
-
 /* 11) Selección de perfil sin JavaScript mediante radio buttons */
 .rol-radio{
   display:none;
