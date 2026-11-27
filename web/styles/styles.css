@@ -453,7 +453,7 @@ input[type="search"]{-webkit-appearance:none;appearance:none}
   outline-offset:2px;
 }
 
-/* Estados de aviso de solicitud en Préstamos sin JS */
+/* Estados de aviso de solicitud en Préstamos*/
 .aviso--solicitud-ok,
 .aviso--solicitud-error{
   display:none;
@@ -477,7 +477,7 @@ input[type="search"]{-webkit-appearance:none;appearance:none}
   font:500 16px var(--fuente-texto);
 }
 
-/* Menú desplegable de Apartar en Objetos perdidos sin JavaScript */
+/* Menú desplegable de Apartar en Objetos perdidos */
 .item .menu-apartar{
   display:none;
 }
@@ -558,7 +558,7 @@ body > .contenedor {
   font-size: 0.8rem;
   font-weight: 700;
   line-height: 1.25;
-  color: var(--accent, #134e3a);
+  color: var(--accent, #8F1D17);
 }
 
 .utr-pie-sem__titulo {
@@ -582,7 +582,7 @@ body > .contenedor {
 .utr-pie-sem__enlace {
   font-size: 0.72rem;
   line-height: 1.3;
-  color: var(--accent, #134e3a);
+  color: var(--accent, #8F1D17);
   text-decoration: none;
 }
 
