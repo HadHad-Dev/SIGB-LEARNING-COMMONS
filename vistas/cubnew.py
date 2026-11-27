@@ -1,8 +1,14 @@
 import tkinter as tk
+from tkinter import messagebox, simpledialog
 from config import COLORES, FUENTES, ESTADOS
 from utils import crear_tarjeta_kpi, crear_tarjeta_base
-from database.recursos_cub import obtener_kpis_cubi, obtener_cubiculos_detalle
-
+from database.recursos_cub import (
+    obtener_kpis_cubi,
+    obtener_cubiculos_detalle,
+    registrar_reserva_cubiculo,
+    extender_tiempo_cubiculo,
+    liberar_cubiculo,
+)
 
 def _estilo_seguro(clave_estado):
     """Obtiene (etiqueta, texto, fondo) de ESTADOS evitando KeyError si falta alguna clave."""
@@ -22,9 +28,9 @@ def _estilo_seguro(clave_estado):
 
 
 class CubiculosView(tk.Frame):
-    def __init__(self, parent):
+    def __init__(self, parent, usuario_actual=None):
         super().__init__(parent, bg=COLORES["blanco_fondo"])
-
+        self.usuario_actual = usuario_actual or {}
         self.cubiculos_por_codigo = {}
         self.celdas = {}
         self.seleccionado = None
@@ -165,8 +171,39 @@ class CubiculosView(tk.Frame):
             cursor="hand2",
             activebackground=COLORES["rojo_oscuro"],
             activeforeground=COLORES["blanco_fondo"],
+            command=self._accion_registrar_reserva,
         )
         self.btn_reserva.pack(fill="x", pady=5)
+
+        self.btn_extender = tk.Button(
+            acciones,
+            text="Extender tiempo",
+            bg=COLORES["blanco_fondo"],
+            fg=COLORES["texto_principal"],
+            font=FUENTES["texto_normal"],
+            relief="solid",
+            bd=1,
+            padx=15,
+            pady=8,
+            cursor="hand2",
+            command=self._accion_extender_tiempo,
+        )
+        self.btn_extender.pack(fill="x", pady=5)
+
+        self.btn_liberar = tk.Button(
+            acciones,
+            text="Liberar cubículo",
+            bg=COLORES["blanco_fondo"],
+            fg=COLORES["texto_principal"],
+            font=FUENTES["texto_normal"],
+            relief="solid",
+            bd=1,
+            padx=15,
+            pady=8,
+            cursor="hand2",
+            command=self._accion_liberar,
+        )
+        self.btn_liberar.pack(fill="x", pady=5)
 
         for texto in ("Extender tiempo", "Liberar cubículo"):
             tk.Button(
@@ -298,3 +335,101 @@ class CubiculosView(tk.Frame):
     def _limpiar_frame(self, frame):
         for widget in frame.winfo_children():
             widget.destroy()
+
+    def _accion_registrar_reserva(self):
+        if not self.seleccionado:
+            messagebox.showwarning("Sin selección", "Selecciona un cubículo primero.")
+            return
+
+        cub = self.cubiculos_por_codigo.get(self.seleccionado)
+        if not cub or cub["status"] != "disponible":
+            messagebox.showwarning("No disponible", "Solo puedes registrar reserva en cubículos disponibles.")
+            return
+
+        raw_user = simpledialog.askstring(
+            "Registrar reserva",
+            f"Ingresa el ID / matrícula del usuario para {cub['description_title']}:",
+            parent=self,
+        )
+        if raw_user is None:
+            return
+        raw_user = raw_user.strip()
+        if not raw_user.isdigit():
+            messagebox.showwarning("Dato inválido", "El ID de usuario debe ser numérico.")
+            return
+
+        cap_max = cub.get("capacity") or 6
+        raw_asist = simpledialog.askinteger(
+            "Asistentes",
+            f"Número de asistentes (capacidad máx.: {cap_max}):",
+            minvalue=1,
+            maxvalue=int(cap_max),
+            initialvalue=1,
+            parent=self,
+        )
+        if raw_asist is None:
+            return
+
+        ok, msg = registrar_reserva_cubiculo(self.seleccionado, int(raw_user), int(raw_asist))
+        if ok:
+            messagebox.showinfo("Reserva registrada", msg)
+            self.cargar_datos()
+        else:
+            messagebox.showerror("Error", msg)
+
+    def _accion_extender_tiempo(self):
+        if not self.seleccionado:
+            messagebox.showwarning("Sin selección", "Selecciona un cubículo primero.")
+            return
+
+        cub = self.cubiculos_por_codigo.get(self.seleccionado)
+        if not cub or cub["status"] != "en_uso":
+            messagebox.showwarning("Sin uso activo", "El cubículo seleccionado no está en uso.")
+            return
+
+        minutos = simpledialog.askinteger(
+            "Extender tiempo",
+            f"¿Cuántos minutos deseas agregar a {cub['description_title']}?",
+            minvalue=15,
+            maxvalue=240,
+            initialvalue=30,
+            parent=self,
+        )
+        if minutos is None:
+            return
+
+        ok, msg = extender_tiempo_cubiculo(self.seleccionado, int(minutos))
+        if ok:
+            messagebox.showinfo("Tiempo extendido", msg)
+            self.cargar_datos()
+        else:
+            messagebox.showerror("Error", msg)
+
+    def _accion_liberar(self):
+        if not self.seleccionado:
+            messagebox.showwarning("Sin selección", "Selecciona un cubículo primero.")
+            return
+
+        cub = self.cubiculos_por_codigo.get(self.seleccionado)
+        if not cub:
+            return
+
+        if cub["status"] == "disponible":
+            messagebox.showinfo("Ya disponible", "Este cubículo ya está disponible.")
+            return
+
+        confirmar = messagebox.askyesno(
+            "Liberar cubículo",
+            f"¿Deseas liberar {cub['description_title']} ({cub['bar_code']}) y registrar su cierre en el historial?",
+            parent=self,
+        )
+        if not confirmar:
+            return
+
+        closed_by = self.usuario_actual.get("user_id")
+        ok, msg = liberar_cubiculo(self.seleccionado, closed_by_user_id=closed_by)
+        if ok:
+            messagebox.showinfo("Cubículo liberado", msg)
+            self.cargar_datos()
+        else:
+            messagebox.showerror("Error", msg)
