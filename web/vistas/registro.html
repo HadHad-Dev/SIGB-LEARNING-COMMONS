@@ -11,96 +11,42 @@
 </head>
 <body>
 <div class="pantalla-centrada">
-  <div class="card">
+  <div class="card card--sombra">
     <div class="card__head">
       <img class="logo" src="../../img/UTRLOGO.png" alt="Logotipo de la Universidad Tecnológica El Retoño">
       <h1>Crear cuenta</h1>
-      <p class="card__sub">Completa tus datos según tu tipo de usuario.</p>
+      <p class="card__sub">Registra tu perfil para acceder a los servicios de biblioteca.</p>
     </div>
 
     <form action="login.html" method="get">
-      <input class="rol-radio" type="radio" name="rol_registro" id="reg-est" value="alumno" checked>
-      <input class="rol-radio" type="radio" name="rol_registro" id="reg-inv" value="externo">
-      <input class="rol-radio" type="radio" name="rol_registro" id="reg-adm" value="administrador">
-
-      <div class="tabs tabs--radio" role="tablist" aria-label="Tipo de usuario a registrar">
-        <label class="tab" for="reg-est">Alumno</label>
-        <label class="tab" for="reg-inv">Invitado</label>
-        <label class="tab" for="reg-adm">Administrador</label>
+      <div class="field">
+        <label for="reg-nombre">Nombre completo</label>
+        <input id="reg-nombre" name="full_name" type="text" placeholder="Ej. Ana María López">
       </div>
 
-      <!-- Panel Alumno -->
-      <div class="panel panel--est">
-        <div class="field">
-          <label for="est-reg-id">Matrícula / ID de usuario</label>
-          <input class="mono" id="est-reg-id" name="user_id" type="text" inputmode="numeric" placeholder="Ej. 5483" required>
-        </div>
-        <div class="field">
-          <label for="est-reg-nombre">Nombre completo</label>
-          <input id="est-reg-nombre" name="full_name" type="text" maxlength="120" placeholder="Ej. Sofía Hernández López" required>
-        </div>
-        <div class="field">
-          <label for="est-reg-genero">Género</label>
-          <select id="est-reg-genero" name="gender" required>
-            <option value="" selected disabled>Selecciona género</option>
-            <option value="F">Femenino (F)</option>
-            <option value="M">Masculino (M)</option>
-          </select>
-        </div>
-        <div class="field">
-          <label for="est-reg-carrera">Carrera</label>
-          <select id="est-reg-carrera" name="major" required>
-            <option value="" selected disabled>Selecciona tu carrera</option>
-            <option value="TDSM">TDSM</option>
-            <option value="CDIA">CDIA</option>
-            <option value="IMT">IMT</option>
-            <option value="TMKT">TMKT</option>
-            <option value="IDGS">IDGS</option>
-            <option value="LI">LI</option>
-            <option value="ITI">ITI</option>
-          </select>
-        </div>
-        <div class="field">
-          <label for="est-reg-cuatri">Cuatrimestre</label>
-          <input class="mono" id="est-reg-cuatri" name="quarter" type="number" min="1" max="11" placeholder="1 a 11" required>
-          <p class="help">Permitido entre 1 y 11.</p>
-        </div>
-        <div class="field">
-          <label for="est-reg-pw">Contraseña</label>
-          <input id="est-reg-pw" name="password" type="password" maxlength="100" placeholder="Crea una contraseña" required>
-        </div>
+      <div class="field">
+        <label for="reg-id">Matrícula o ID</label>
+        <input class="mono" id="reg-id" name="user_id" type="text" inputmode="numeric" placeholder="Ej. 5480">
       </div>
 
-      <!-- Panel Invitado (Externo: sin contraseña, teléfono obligatorio) -->
-      <div class="panel panel--inv">
-        <div class="field">
-          <label for="inv-reg-id">ID de visitante externo</label>
-          <input class="mono" id="inv-reg-id" name="user_id" type="text" inputmode="numeric" placeholder="Ej. 9002" required>
-        </div>
-        <div class="field">
-          <label for="inv-reg-nombre">Nombre completo</label>
-          <input id="inv-reg-nombre" name="full_name" type="text" maxlength="120" placeholder="Ej. Mariana Ortega" required>
-        </div>
-        <div class="field">
-          <label for="inv-reg-tel">Teléfono de contacto</label>
-          <input class="mono" id="inv-reg-tel" name="phone" type="tel" inputmode="tel" maxlength="20" placeholder="Ej. 4491234567" required>
-          <p class="help">Los usuarios externos no usan contraseña.</p>
-        </div>
+      <div class="field">
+        <label for="reg-correo">Correo electrónico</label>
+        <input id="reg-correo" name="email" type="email" placeholder="nombre@utr.edu.mx">
       </div>
 
-      <!-- Panel Administrador -->
-      <div class="panel panel--adm">
-        <div class="field">
-          <label for="adm-reg-id">ID de administrador</label>
-          <input class="mono" id="adm-reg-id" name="user_id" type="text" inputmode="numeric" placeholder="Ej. 1002" required>
-        </div>
-        <div class="field">
-          <label for="adm-reg-nombre">Nombre completo</label>
-          <input id="adm-reg-nombre" name="full_name" type="text" maxlength="120" placeholder="Ej. Luis Alberto Gómez" required>
-        </div>
-        <div class="field">
-          <label for="adm-reg-pw">Contraseña</label>
-          <input id="adm-reg-pw" name="password" type="password" maxlength="100" placeholder="Crea una contraseña" required>
+      <div class="field">
+        <label for="reg-tel">Teléfono</label>
+        <input class="mono" id="reg-tel" name="phone" type="tel" inputmode="tel" placeholder="Ej. 4491234567">
+      </div>
+
+      <div class="field">
+        <label for="reg-pw">Contraseña</label>
+        <div class="pw">
+          <input id="reg-pw" name="password" type="password" placeholder="Crea una contraseña">
+          <button class="eye" type="button" aria-label="Mostrar contraseña" aria-pressed="false">
+            <svg class="on" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
+            <svg class="off" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M17.94 17.94A10.94 10.94 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94"/><path d="M9.9 4.24A10.94 10.94 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19"/><line x1="1" y1="1" x2="23" y2="23"/></svg>
+          </button>
         </div>
       </div>
 
@@ -110,5 +56,33 @@
     <p class="card__foot">¿Ya tienes cuenta? <a class="link" href="login.html">Inicia sesión</a></p>
   </div>
 </div>
+
+<footer class="utr-pie-sem" aria-label="Pie de página institucional">
+  <div class="utr-pie-sem__interior">
+    <div class="utr-pie-sem__columna">
+      <h3 class="utr-pie-sem__marca">Universidad Tecnológica de Aguascalientes (UTR)</h3>
+      <p class="utr-pie-sem__texto">Formación tecnológica, vinculación y servicios académicos.</p>
+    </div>
+
+    <div class="utr-pie-sem__columna">
+      <h3 class="utr-pie-sem__titulo">Ubicación y contacto</h3>
+      <p class="utr-pie-sem__texto">Carretera a San Luis Potosí km. 68, El Retoño, Ags. · <a class="utr-pie-sem__enlace" href="mailto:contacto@utr.edu.mx">contacto@utr.edu.mx</a></p>
+    </div>
+
+    <div class="utr-pie-sem__columna">
+      <h3 class="utr-pie-sem__titulo">Redes sociales</h3>
+      <div class="utr-pie-sem__redes">
+        <a class="utr-pie-sem__enlace" href="https://utr.edu.mx/" target="_blank" rel="noopener noreferrer">Sitio web</a>
+        <a class="utr-pie-sem__enlace" href="https://www.facebook.com/" target="_blank" rel="noopener noreferrer">Facebook</a>
+        <a class="utr-pie-sem__enlace" href="https://www.instagram.com/" target="_blank" rel="noopener noreferrer">Instagram</a>
+      </div>
+    </div>
+  </div>
+
+  <div class="utr-pie-sem__base">
+    <p class="utr-pie-sem__copy">© 2026 Universidad Tecnológica de Aguascalientes (UTR). Todos los derechos reservados.</p>
+    <p class="utr-pie-sem__copy">SIGB Learning Commons</p>
+  </div>
+</footer>
 </body>
 </html>

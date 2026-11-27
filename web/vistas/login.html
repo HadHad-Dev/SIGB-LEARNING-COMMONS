@@ -33,21 +33,17 @@
       <div class="panel panel--est">
         <div class="field">
           <label for="est-id">Matrícula / ID de usuario</label>
-          <input class="mono" id="est-id" name="user_id" type="text" inputmode="numeric" placeholder="Ej. 5479" required>
+          <input class="mono" id="est-id" name="est_user_id" type="text" inputmode="numeric" placeholder="Ej. 5479">
           <p class="help">Identificador numérico registrado como alumno.</p>
         </div>
         <div class="field">
           <label for="est-pw">Contraseña</label>
           <div class="pw">
-            <input id="est-pw" name="password" type="password" placeholder="Ingresa tu contraseña" required>
+            <input id="est-pw" name="est_password" type="password" placeholder="Ingresa tu contraseña">
             <button class="eye" type="button" aria-label="Mostrar contraseña" aria-pressed="false">
               <svg class="on" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
               <svg class="off" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M17.94 17.94A10.94 10.94 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94"/><path d="M9.9 4.24A10.94 10.94 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19"/><line x1="1" y1="1" x2="23" y2="23"/></svg>
             </button>
-          </div>
-          <div class="row">
-            <p class="help"></p>
-            <a class="link forgot" href="recuperar.html">¿Olvidaste tu contraseña?</a>
           </div>
         </div>
       </div>
@@ -56,12 +52,12 @@
       <div class="panel panel--inv">
         <div class="field">
           <label for="inv-id">ID de visitante externo</label>
-          <input class="mono" id="inv-id" name="user_id" type="text" inputmode="numeric" placeholder="Ej. 9001" required>
+          <input class="mono" id="inv-id" name="inv_user_id" type="text" inputmode="numeric" placeholder="Ej. 9001">
           <p class="help">Los usuarios externos no utilizan contraseña.</p>
         </div>
         <div class="field">
           <label for="inv-tel">Teléfono registrado</label>
-          <input class="mono" id="inv-tel" name="phone" type="tel" inputmode="tel" placeholder="Ej. 4491234567" required>
+          <input class="mono" id="inv-tel" name="phone" type="tel" inputmode="tel" placeholder="Ej. 4491234567">
           <p class="help">Requerido para validar el acceso externo.</p>
         </div>
       </div>
@@ -70,21 +66,17 @@
       <div class="panel panel--adm">
         <div class="field">
           <label for="adm-id">ID de administrador</label>
-          <input class="mono" id="adm-id" name="user_id" type="text" inputmode="numeric" placeholder="Ej. 1001" required>
+          <input class="mono" id="adm-id" name="adm_user_id" type="text" inputmode="numeric" placeholder="Ej. 1001">
           <p class="help">Clave numérica de cuenta administrativa.</p>
         </div>
         <div class="field">
           <label for="adm-pw">Contraseña</label>
           <div class="pw">
-            <input id="adm-pw" name="password" type="password" placeholder="Ingresa tu contraseña" required>
+            <input id="adm-pw" name="adm_password" type="password" placeholder="Ingresa tu contraseña">
             <button class="eye" type="button" aria-label="Mostrar contraseña" aria-pressed="false">
               <svg class="on" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
               <svg class="off" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M17.94 17.94A10.94 10.94 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94"/><path d="M9.9 4.24A10.94 10.94 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19"/><line x1="1" y1="1" x2="23" y2="23"/></svg>
             </button>
-          </div>
-          <div class="row">
-            <p class="help"></p>
-            <a class="link forgot" href="recuperar.html">¿Olvidaste tu contraseña?</a>
           </div>
         </div>
       </div>
@@ -95,5 +87,34 @@
     <p class="card__foot">¿Aún no tienes cuenta? <a class="link" href="registro.html">Regístrate aquí</a></p>
   </div>
 </div>
+
+<footer class="utr-pie-sem" aria-label="Pie de página institucional">
+  <div class="utr-pie-sem__interior">
+    <div class="utr-pie-sem__columna">
+      <h3 class="utr-pie-sem__marca">Universidad Tecnológica de Aguascalientes (UTR)</h3>
+      <p class="utr-pie-sem__texto">Formación tecnológica, vinculación y servicios académicos para la comunidad universitaria.</p>
+    </div>
+
+    <div class="utr-pie-sem__columna">
+      <h3 class="utr-pie-sem__titulo">Ubicación y contacto</h3>
+      <p class="utr-pie-sem__texto">Carretera a San Luis Potosí km. 68, El Retoño, Aguascalientes, Ags.</p>
+      <a class="utr-pie-sem__enlace" href="mailto:contacto@utr.edu.mx">contacto@utr.edu.mx</a>
+    </div>
+
+    <div class="utr-pie-sem__columna">
+      <h3 class="utr-pie-sem__titulo">Redes sociales</h3>
+      <div class="utr-pie-sem__redes">
+        <a class="utr-pie-sem__enlace" href="https://utr.edu.mx/" target="_blank" rel="noopener noreferrer">Sitio web</a>
+        <a class="utr-pie-sem__enlace" href="https://www.facebook.com/" target="_blank" rel="noopener noreferrer">Facebook</a>
+        <a class="utr-pie-sem__enlace" href="https://www.instagram.com/" target="_blank" rel="noopener noreferrer">Instagram</a>
+      </div>
+    </div>
+  </div>
+
+  <div class="utr-pie-sem__base">
+    <p class="utr-pie-sem__copy">© 2026 Universidad Tecnológica de Aguascalientes (UTR). Todos los derechos reservados.</p>
+    <p class="utr-pie-sem__copy">SIGB Learning Commons</p>
+  </div>
+</footer>
 </body>
 </html>

@@ -140,7 +140,7 @@ def obtener_prestamos_libros():
             SELECT
                 CONCAT('ACT-', a.usage_id) AS folio,
                 a.usage_id,
-                CONCAT(u.user_id, ' - ', u.full_name) AS estudiante,
+                CONCAT(COALESCE(u.institutional_id, u.user_id), ' - ', u.full_name) AS estudiante,
                 CONCAT(ir.bar_code, ' - ', ir.description_title) AS libro,
                 a.due_at,
                 CASE

@@ -1,15 +1,38 @@
 import mysql.connector
 from database.conexion import obtener_conexion
-def _resolver_usuario_o_nombre(cursor, texto):
 
+
+def _obtener_o_crear_usuario(cursor, texto):
+ 
     texto = texto.strip()
+
     if texto.isdigit():
-        cursor.execute("SELECT user_id FROM user WHERE user_id = %s", (int(texto),))
+        num = int(texto)
+        cursor.execute(
+            "SELECT user_id FROM user WHERE institutional_id = %s OR user_id = %s LIMIT 1",
+            (num, num),
+        )
         fila = cursor.fetchone()
         if fila:
-            return int(texto), None
-    return None, texto
+            return fila[0]
+
+    cursor.execute(
+        "SELECT user_id FROM user WHERE LOWER(full_name) = LOWER(%s) LIMIT 1",
+        (texto,),
+    )
+    fila = cursor.fetchone()
+    if fila:
+        return fila[0]
+
+    cursor.execute(
+        "INSERT INTO user (full_name, user_type) VALUES (%s, 'externo')",
+        (texto,),
+    )
+    return cursor.lastrowid
+
+
 def obtener_kpis_objetos():
+    """Retorna total de objetos, en custodia y entregados."""
     conexion = obtener_conexion()
     if conexion is None:
         return {"total": 0, "en_custodia": 0, "entregados": 0}
@@ -51,10 +74,10 @@ def obtener_objetos(filtro=""):
                 l.found_date,
                 l.status,
                 l.delivered_at,
-                COALESCE(u_found.full_name, l.finder_name) AS reporto,
-                COALESCE(u_deliv.full_name, l.delivered_to_name) AS entregado_a
+                u_found.full_name AS reporto,
+                u_deliv.full_name AS entregado_a
             FROM lost_item l
-            LEFT JOIN user u_found ON l.found_by_user_id = u_found.user_id
+            JOIN user u_found ON l.found_by_user_id = u_found.user_id
             LEFT JOIN user u_deliv ON l.delivered_to_user_id = u_deliv.user_id
         """
         params = []
@@ -64,7 +87,7 @@ def obtener_objetos(filtro=""):
                 WHERE l.title LIKE %s
                    OR l.description LIKE %s
                    OR l.found_location LIKE %s
-                   OR COALESCE(u_found.full_name, l.finder_name) LIKE %s
+                   OR u_found.full_name LIKE %s
             """
             patron = f"%{filtro}%"
             params = [patron, patron, patron, patron]
@@ -76,26 +99,25 @@ def obtener_objetos(filtro=""):
         cursor.close()
         conexion.close()
 
-
 def registrar_objeto(titulo, descripcion, ubicacion, reportado_por):
+    """Inserta un nuevo objeto perdido ligado siempre a un user_id."""
     conexion = obtener_conexion()
     if conexion is None:
         return False, "No hay conexión con la base de datos."
 
     cursor = conexion.cursor()
     try:
-        user_id, nombre_libre = _resolver_usuario_o_nombre(cursor, reportado_por)
+        found_by_id = _obtener_o_crear_usuario(cursor, reportado_por)
         sql = """
             INSERT INTO lost_item
-                (title, description, found_location, found_by_user_id, finder_name, status)
-            VALUES (%s, %s, %s, %s, %s, 'en_custodia')
+                (title, description, found_location, found_by_user_id, status)
+            VALUES (%s, %s, %s, %s, 'en_custodia')
         """
         cursor.execute(sql, (
             titulo.strip(),
             descripcion.strip(),
             ubicacion.strip() or None,
-            user_id,
-            nombre_libre,
+            found_by_id,
         ))
         conexion.commit()
         return True, "Objeto registrado correctamente."
@@ -106,24 +128,23 @@ def registrar_objeto(titulo, descripcion, ubicacion, reportado_por):
         cursor.close()
         conexion.close()
 
-
 def marcar_objeto_entregado(item_id, admin_id, entregado_a):
     conexion = obtener_conexion()
     if conexion is None:
         return False, "No hay conexión con la base de datos."
+
     cursor = conexion.cursor()
     try:
-        user_id, nombre_libre = _resolver_usuario_o_nombre(cursor, entregado_a)
+        delivered_to_id = _obtener_o_crear_usuario(cursor, entregado_a)
         sql = """
             UPDATE lost_item
             SET status = 'entregado',
                 delivered_at = NOW(),
                 delivered_by = %s,
-                delivered_to_user_id = %s,
-                delivered_to_name = %s
+                delivered_to_user_id = %s
             WHERE item_id = %s
         """
-        cursor.execute(sql, (admin_id, user_id, nombre_libre, item_id))
+        cursor.execute(sql, (admin_id, delivered_to_id, item_id))
         conexion.commit()
         return True, "Objeto marcado como entregado."
     except mysql.connector.Error as err:
@@ -136,6 +157,7 @@ def regresar_objeto_custodia(item_id):
     conexion = obtener_conexion()
     if conexion is None:
         return False, "No hay conexión con la base de datos."
+
     cursor = conexion.cursor()
     try:
         sql = """
@@ -143,8 +165,7 @@ def regresar_objeto_custodia(item_id):
             SET status = 'en_custodia',
                 delivered_at = NULL,
                 delivered_by = NULL,
-                delivered_to_user_id = NULL,
-                delivered_to_name = NULL
+                delivered_to_user_id = NULL
             WHERE item_id = %s
         """
         cursor.execute(sql, (item_id,))

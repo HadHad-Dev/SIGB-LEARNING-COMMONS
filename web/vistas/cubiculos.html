@@ -24,63 +24,65 @@
 
   <div class="aviso aviso--ok aviso--reserva-ok" role="status">
     <div class="row">
-      <span>La reserva del cubículo se realizó correctamente dentro del horario permitido.</span>
+      <div class="aviso__texto">La reserva del cubículo se realizó correctamente dentro del horario permitido.</div>
       <label class="link" for="res-none">Cerrar</label>
     </div>
   </div>
 
   <div class="aviso aviso--error aviso--reserva-error" role="status">
     <div class="row">
-      <span>Completa la selección de cubículo, hora de inicio y duración válida (máximo 1 hora) o elige un horario disponible.</span>
+      <div class="aviso__texto">Completa la selección de cubículo, hora de inicio y duración válida (máximo 1 hora) o elige un horario disponible.</div>
       <label class="link" for="res-none">Cerrar</label>
     </div>
   </div>
 
   <div class="seccion" aria-label="Reglas de reserva">
     <div class="fechas">
-      <div class="dato"><span class="etiqueta">Horario de reservas</span><span><span class="mono">07:30</span> a <span class="mono">16:30</span> · máximo 2 hora</span></div>
-      <div class="dato"><span class="etiqueta">Disponibilidad de hoy</span><span class="mono" id="hoy">2026-11-25</span></div>
+      <div class="dato"><div class="etiqueta">Horario de reservas</div><div class="dato__valor"><div class="mono">07:30</div> a <div class="mono">16:30</div> · máximo 2 hora</div></div>
+      <div class="dato"><div class="etiqueta">Disponibilidad de hoy</div><div class="mono" id="hoy">2026-11-25</div></div>
     </div>
   </div>
 
-  <div>
-    <p class="cal__leyenda help"><span class="leyenda leyenda--libre">Libre</span><span class="leyenda leyenda--reservado">Reservado</span><span class="leyenda leyenda--ocupado">Ocupado</span></p>
+  <div class="cal__leyenda help">
+    <div class="leyenda leyenda--libre">Libre</div>
+    <div class="leyenda leyenda--reservado">Reservado</div>
+    <div class="leyenda leyenda--ocupado">Ocupado</div>
   </div>
 
   <div class="cubiculos items" id="lista" aria-label="Cubículos">
     <div class="item">
       <h3>Cubículo América</h3>
-      <div class="dato"><span class="etiqueta">Capacidad</span><span class="mono">6 personas</span></div>
-      <div class="dato"><span class="etiqueta">Estado</span><span>Libre</span></div>
+      <div class="dato"><div class="etiqueta">Capacidad</div><div class="mono">6 personas</div></div>
+      <div class="dato"><div class="etiqueta">Estado</div><div>Libre</div></div>
       <a class="btn" href="#modal">Reservar cubículo</a>
     </div>
 
     <div class="item">
       <h3>Cubículo Europa</h3>
-      <div class="dato"><span class="etiqueta">Capacidad</span><span class="mono">6 personas</span></div>
-      <div class="dato"><span class="etiqueta">Estado</span><span>Libre</span></div>
+      <div class="dato"><div class="etiqueta">Capacidad</div><div class="mono">6 personas</div></div>
+      <div class="dato"><div class="etiqueta">Estado</div><div>Libre</div></div>
       <a class="btn" href="#modal">Reservar cubículo</a>
     </div>
 
     <div class="item">
       <h3>Cubículo Asia</h3>
-      <div class="dato"><span class="etiqueta">Capacidad</span><span class="mono">6 personas</span></div>
-      <div class="dato"><span class="etiqueta">Estado</span><span>Reservado</span></div>
+      <div class="dato"><div class="etiqueta">Capacidad</div><div class="mono">6 personas</div></div>
+      <div class="dato"><div class="etiqueta">Estado</div><div>Reservado</div></div>
       <a class="btn btn--secundario" href="#modal">Ver / reservar horario</a>
     </div>
 
     <div class="item">
       <h3>Cubículo África</h3>
-      <div class="dato"><span class="etiqueta">Capacidad</span><span class="mono">6 personas</span></div>
-      <div class="dato"><span class="etiqueta">Estado</span><span>Libre</span></div>
+      <div class="dato"><div class="etiqueta">Capacidad</div><div class="mono">6 personas</div></div>
+      <div class="dato"><div class="etiqueta">Estado</div><div>Libre</div></div>
       <a class="btn" href="#modal">Reservar cubículo</a>
     </div>
 
     <div class="item">
       <h3>Cubículo Oceanía</h3>
-      <div class="dato"><span class="etiqueta">Capacidad</span><span class="mono">6 personas</span></div>
-      <div class="dato"><span class="etiqueta">Estado</span><span>Ocupado</span></div>
-      <span class="help">No disponible en este momento</span>
+      <div class="dato"><div class="etiqueta">Capacidad</div><div class="mono">6 personas</div></div>
+      <div class="dato"><div class="etiqueta">Estado</div><div>Ocupado</div></div>
+      <div class="help">No disponible en este momento</div>
     </div>
   </div>
 
@@ -145,11 +147,38 @@
       <p class="help" id="r-msg" aria-live="polite"></p>
       <div class="row">
         <label class="btn" id="r-confirmar" for="res-ok">Confirmar reserva</label>
-        
         <a class="link" id="r-cancelar" href="cubiculos.html">Cancelar</a>
       </div>
     </div>
   </div>
 </div>
+
+<footer class="utr-pie-sem" aria-label="Pie de página institucional">
+  <div class="utr-pie-sem__interior">
+    <div class="utr-pie-sem__columna">
+      <h3 class="utr-pie-sem__marca">Universidad Tecnológica de Aguascalientes (UTR)</h3>
+      <p class="utr-pie-sem__texto">Formación tecnológica, vinculación y servicios académicos.</p>
+    </div>
+
+    <div class="utr-pie-sem__columna">
+      <h3 class="utr-pie-sem__titulo">Ubicación y contacto</h3>
+      <p class="utr-pie-sem__texto">Carretera a San Luis Potosí km. 68, El Retoño, Ags. · <a class="utr-pie-sem__enlace" href="mailto:contacto@utr.edu.mx">contacto@utr.edu.mx</a></p>
+    </div>
+
+    <div class="utr-pie-sem__columna">
+      <h3 class="utr-pie-sem__titulo">Redes sociales</h3>
+      <div class="utr-pie-sem__redes">
+        <a class="utr-pie-sem__enlace" href="https://utr.edu.mx/" target="_blank" rel="noopener noreferrer">Sitio web</a>
+        <a class="utr-pie-sem__enlace" href="https://www.facebook.com/" target="_blank" rel="noopener noreferrer">Facebook</a>
+        <a class="utr-pie-sem__enlace" href="https://www.instagram.com/" target="_blank" rel="noopener noreferrer">Instagram</a>
+      </div>
+    </div>
+  </div>
+
+  <div class="utr-pie-sem__base">
+    <p class="utr-pie-sem__copy">© 2026 Universidad Tecnológica de Aguascalientes (UTR). Todos los derechos reservados.</p>
+    <p class="utr-pie-sem__copy">SIGB Learning Commons</p>
+  </div>
+</footer>
 </body>
 </html>
